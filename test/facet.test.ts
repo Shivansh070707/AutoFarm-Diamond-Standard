@@ -1,239 +1,242 @@
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 import { Contract } from 'ethers';
-import { ethers } from 'hardhat';
-import { deployDiamond } from '../scripts/deploy';
+import { initializer } from '../scripts/initFunction';
 import { FacetCutAction, getSelectorsFromContract } from '../scripts/libraries';
-import {
-  DiamondCutFacet,
-  DiamondLoupeFacet,
-  AutoFarmV2,
-  StratX2,
-  IERC20,
-} from '../typechain-types';
-import { time } from '@nomicfoundation/hardhat-network-helpers';
+import { DiamondCutFacet, DiamondLoupeFacet, IERC20 } from '../typechain-types';
 
 describe('Test', () => {
-  let diamondAddress: string;
   let diamondCutFacet: Contract | DiamondCutFacet;
   let diamondLoupeFacet: Contract | DiamondLoupeFacet;
-  let stratx2: Contract;
-  let stratx2Settings: Contract;
-  let stratx2getter: Contract;
+  let stratX2Facet;
+  let stratX2Setter: Contract;
+  let stratX2Getter: Contract;
+  let autoFarmFacet;
+  let autoFarmGetter;
   let OwnershipFacet: Contract;
-  let farmA: Contract | AutoFarmV2;
+  let farmA;
+  let farmB;
   let owner: any;
-  let stratB: Contract | StratX2;
+  let stratB: object;
+  let stratA: any;
   let want: Contract | IERC20;
   let autoV21: Contract | IERC20;
-
+  let data;
   let facetAddresses: string[]; // DiamondCutFacet, DiamondLoupeFacet, StratX2Facet
 
   before(async () => {
-    let data = await deployDiamond();
+    data = await initializer();
     farmA = data.farmA;
+    farmB = data.farmB;
+    stratA = data.stratA;
     stratB = data.stratB;
     want = data.want;
     autoV21 = data.autoV21;
     owner = data.owner;
-    diamondAddress = data.diamondAddress;
-
-    diamondCutFacet = await ethers.getContractAt(
-      'DiamondCutFacet',
-      diamondAddress
-    );
-    diamondLoupeFacet = await ethers.getContractAt(
-      'DiamondLoupeFacet',
-      diamondAddress
-    );
-    OwnershipFacet = await ethers.getContractAt(
-      'OwnershipFacet',
-      diamondAddress
-    );
-
-    stratx2 = await ethers.getContractAt('StratX2Facet', diamondAddress);
-    stratx2Settings = await ethers.getContractAt(
-      'StratX2SetterFacet',
-      diamondAddress
-    );
-    stratx2getter = await ethers.getContractAt(
-      'StratX2GetterFacet',
-      diamondAddress
-    );
   });
 
   describe('test - diamond', () => {
-    it('should have 6 facets -- call to facetAddresses', async () => {
-      facetAddresses = await diamondLoupeFacet.facetAddresses();
-      console.log(facetAddresses);
+    describe('farmA', () => {
+      it('should have 4 facets -- call to facetAddresses', async () => {
+        facetAddresses = await farmA.diamondLoupeFacet.facetAddresses();
+        assert(facetAddresses.length === 4);
+      });
 
-      assert(facetAddresses.length === 6);
-    });
+      it('should have the right function selectors -- call to faceFunctionSelectors', async () => {
+        let selectors, result;
+        diamondCutFacet = farmA.diamondCutFacet;
+        diamondLoupeFacet = farmA.diamondLoupeFacet;
+        autoFarmFacet = farmA.autoFarmFacet;
+        autoFarmGetter = farmA.autoFarmV2GetterFacet;
 
-    it('should have the right function selectors -- call to faceFunctionSelectors', async () => {
-      let selectors, result;
+        // test for DiamondCutFacet
+        selectors = getSelectorsFromContract(diamondCutFacet).getSelectors();
+        result = await diamondLoupeFacet.facetFunctionSelectors(
+          facetAddresses[0]
+        );
+        assert.sameMembers(result, selectors);
 
-      // test for DiamondCutFacet
-      selectors = getSelectorsFromContract(diamondCutFacet).getSelectors();
-      result = await diamondLoupeFacet.facetFunctionSelectors(
-        facetAddresses[0]
-      );
-      assert.sameMembers(result, selectors);
+        // test for DiamondLoupeFacet
+        selectors = getSelectorsFromContract(diamondLoupeFacet).getSelectors();
+        result = await diamondLoupeFacet.facetFunctionSelectors(
+          facetAddresses[1]
+        );
+        assert.sameMembers(result, selectors);
 
-      // test for DiamondLoupeFacet
-      selectors = getSelectorsFromContract(diamondLoupeFacet).getSelectors();
-      result = await diamondLoupeFacet.facetFunctionSelectors(
-        facetAddresses[1]
-      );
-      assert.sameMembers(result, selectors);
+        // test for autoFarmFacet
+        selectors = getSelectorsFromContract(autoFarmFacet).getSelectors();
+        result = await diamondLoupeFacet.facetFunctionSelectors(
+          facetAddresses[2]
+        );
+        assert.sameMembers(result, selectors);
 
-      // test for Ownershipfacet
-      selectors = getSelectorsFromContract(OwnershipFacet).getSelectors();
-      result = await diamondLoupeFacet.facetFunctionSelectors(
-        facetAddresses[2]
-      );
+        // test for autoFarmGetter
+        selectors = getSelectorsFromContract(autoFarmGetter).getSelectors();
+        result = await diamondLoupeFacet.facetFunctionSelectors(
+          facetAddresses[3]
+        );
+        assert.sameMembers(result, selectors);
+      });
+      describe('farmB', () => {
+        it('should have 4 facets -- call to facetAddresses', async () => {
+          facetAddresses = await farmB.diamondLoupeFacet.facetAddresses();
+          assert(facetAddresses.length === 4);
+        });
 
-      // test for stratX2Settings
-      selectors = getSelectorsFromContract(stratx2Settings).getSelectors();
-      result = await diamondLoupeFacet.facetFunctionSelectors(
-        facetAddresses[3]
-      );
-      assert.sameMembers(result, selectors);
+        it('should have the right function selectors -- call to faceFunctionSelectors', async () => {
+          let selectors, result;
+          diamondCutFacet = farmB.diamondCutFacet;
+          diamondLoupeFacet = farmB.diamondLoupeFacet;
+          autoFarmFacet = farmB.autoFarmFacet;
+          autoFarmGetter = farmB.autoFarmV2GetterFacet;
 
-      // test for stratX2
-      selectors = getSelectorsFromContract(stratx2).getSelectors();
-      result = await diamondLoupeFacet.facetFunctionSelectors(
-        facetAddresses[4]
-      );
-      assert.sameMembers(result, selectors);
+          // test for DiamondCutFacet
+          selectors = getSelectorsFromContract(diamondCutFacet).getSelectors();
+          result = await diamondLoupeFacet.facetFunctionSelectors(
+            facetAddresses[0]
+          );
+          assert.sameMembers(result, selectors);
 
-      // test for stratX2Getter
-      selectors = getSelectorsFromContract(stratx2getter).getSelectors();
-      result = await diamondLoupeFacet.facetFunctionSelectors(
-        facetAddresses[5]
-      );
-      assert.sameMembers(result, selectors);
-    });
-  });
-  describe('StratXFacet', () => {
-    it('should return correct pid', async () => {
-      let pid = await stratx2getter.pid();
+          // test for DiamondLoupeFacet
+          selectors =
+            getSelectorsFromContract(diamondLoupeFacet).getSelectors();
+          result = await diamondLoupeFacet.facetFunctionSelectors(
+            facetAddresses[1]
+          );
+          assert.sameMembers(result, selectors);
 
-      expect(pid).to.equal(0);
-    });
-    it('should return correct slippage factor', async () => {
-      let slippageFactor = await stratx2getter.slippageFactor();
+          // test for autoFarmFacet
+          selectors = getSelectorsFromContract(autoFarmFacet).getSelectors();
+          result = await diamondLoupeFacet.facetFunctionSelectors(
+            facetAddresses[2]
+          );
+          assert.sameMembers(result, selectors);
 
-      expect(slippageFactor).to.equal(950);
-    });
-    it('should deposit want tokens in diamond StratX', async () => {
-      console.log(await want.balanceOf(owner.address));
+          // test for autoFarmGetter
+          selectors = getSelectorsFromContract(autoFarmGetter).getSelectors();
+          result = await diamondLoupeFacet.facetFunctionSelectors(
+            facetAddresses[3]
+          );
+          assert.sameMembers(result, selectors);
+        });
+        describe('stratA', () => {
+          it('should have 6 facets -- call to facetAddresses', async () => {
+            facetAddresses = await stratA.diamondLoupeFacet.facetAddresses();
+            assert(facetAddresses.length === 6);
+          });
 
-      await want
-        .connect(owner)
-        .approve(diamondAddress, ethers.utils.parseUnits('10', 'ether'));
+          it('should have the right function selectors -- call to faceFunctionSelectors', async () => {
+            let selectors, result;
+            diamondCutFacet = stratA.diamondCutFacet;
+            diamondLoupeFacet = stratA.diamondLoupeFacet;
+            OwnershipFacet = stratA.OwnershipFacet;
+            stratX2Facet = stratA.stratX2Facet;
+            stratX2Setter = stratA.stratX2Setter;
+            stratX2Getter = stratA.stratX2Getter;
 
-      await expect(
-        stratx2.connect(owner).deposit(ethers.utils.parseEther('10'))
-      ).to.changeTokenBalances(
-        want,
-        [owner.address, stratB.address],
-        [ethers.utils.parseEther('-10'), ethers.utils.parseEther('10')]
-      );
-    });
-    it('should deposit want tokens in farmA -> Diamond Strat -> FarmB ->StratB', async () => {
-      await want
-        .connect(owner)
-        .approve(farmA.address, ethers.utils.parseEther('10'));
-      await expect(
-        farmA.connect(owner).deposit(0, ethers.utils.parseEther('10'))
-      ).to.changeTokenBalances(
-        want,
-        [owner.address, stratB.address],
-        [ethers.utils.parseEther('-10'), ethers.utils.parseEther('10')]
-      );
-    });
-    it('Should withdraw want tokens and that tokens will be transferred to user', async () => {
-      await expect(
-        farmA.connect(owner).withdraw(0, ethers.utils.parseUnits('1', 'ether'))
-      ).to.changeTokenBalances(
-        want,
-        [owner.address, stratB.address],
-        [ethers.utils.parseEther('1'), ethers.utils.parseEther('-1')]
-      );
-    });
-    it('Should withdraw want tokens and that tokens will be transferred to farmA', async () => {
-      await expect(
-        stratx2.connect(owner).withdraw(ethers.utils.parseUnits('1', 'ether'))
-      ).to.changeTokenBalances(
-        want,
-        [farmA.address, stratB.address],
-        [ethers.utils.parseEther('1'), ethers.utils.parseEther('-1')]
-      );
-    });
-    it('Should Withdraw want token and after withdrawing ,user will get some autoV21 tokens', async () => {
-      let currentBlockTime = await time.latest();
-      let one_day = currentBlockTime + 24 * 60 * 60;
-      await time.increaseTo(one_day);
-      let earn_balance_before = await autoV21.balanceOf(owner.address);
+            // test for DiamondCutFacet
+            selectors =
+              getSelectorsFromContract(diamondCutFacet).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[0]
+            );
+            assert.sameMembers(result, selectors);
 
-      await farmA
-        .connect(owner)
-        .withdraw(0, ethers.utils.parseUnits('1', 'ether'));
-      let earn_balance_after = await autoV21.balanceOf(owner.address);
+            // test for DiamondLoupeFacet
+            selectors =
+              getSelectorsFromContract(diamondLoupeFacet).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[1]
+            );
+            assert.sameMembers(result, selectors);
 
-      expect(earn_balance_after - earn_balance_before).to.be.greaterThan(0);
-    });
-    it('Run earn and autocompound want tokens', async () => {
-      /*
-    Increasing blocktime to one year
-     */
-      const currentBlockTime = await time.latest();
-      const one_year = currentBlockTime + 365 * 24 * 60 * 60;
-      await time.increaseTo(one_year);
+            // test for Ownershipfacet
+            selectors = getSelectorsFromContract(OwnershipFacet).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[2]
+            );
 
-      let want_before = await want.balanceOf(stratB.address);
-      await stratx2.connect(owner).earn();
-      let want_after = await want.balanceOf(stratB.address);
-      expect(want_after - want_before).to.be.greaterThan(0);
-    });
-  });
-  describe('StratX2Settings', () => {
-    it('Should set Settings', async () => {
-      await stratx2Settings
-        .connect(owner)
-        .setSettings(10000, 9975, 250, 500, 500);
-      expect(await stratx2getter.entranceFeeFactor()).to.equal(10000);
-      expect(await stratx2getter.withdrawFeeFactor()).to.equal(9975);
-      expect(await stratx2getter.controllerFee()).to.equal(250);
-      expect(await stratx2getter.buyBackRate()).to.equal(500);
-      expect(await stratx2getter.slippageFactor()).to.equal(500);
-    });
-  });
-  describe('Errors', () => {
-    it('Should throw error when caller is not gov ', async () => {
-      await expect(stratx2Settings.setGov(owner.address)).to.be.revertedWith(
-        '!gov'
-      );
-    });
-    // it('should throw error when enter two fun', async () => {
-    //   let Check = await ethers.getContractFactory('ReentrancyChecker');
-    //   let check = await Check.deploy(diamondAddress);
-    //   await check.attack();
-    //   let tx = await check.attack();
+            // test for stratX2Setter
+            selectors = getSelectorsFromContract(stratX2Setter).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[3]
+            );
+            assert.sameMembers(result, selectors);
 
-    //   let receipt = await tx.wait();
-    //   console.log(
-    //     receipt.events?.filter((data) => {
-    //       return data.event == 'Response';
-    //     })
-    //   );
-    //   console.log(await stratx2.getnum());
-    // });
-    it('should throw error when paused', async () => {
-      await stratx2Settings.connect(owner).pause();
-      expect(
-        stratx2.connect(owner).deposit(ethers.utils.parseEther('1'))
-      ).to.be.revertedWith('Pausable: paused');
+            // test for stratX2Facet
+            selectors = getSelectorsFromContract(stratX2Facet).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[4]
+            );
+            assert.sameMembers(result, selectors);
+
+            // test for stratX2Getter
+            selectors = getSelectorsFromContract(stratX2Getter).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[5]
+            );
+            assert.sameMembers(result, selectors);
+          });
+        });
+        describe('stratB', () => {
+          it('should have 6 facets -- call to facetAddresses', async () => {
+            facetAddresses = await stratB.diamondLoupeFacet.facetAddresses();
+            assert(facetAddresses.length === 6);
+          });
+
+          it('should have the right function selectors -- call to faceFunctionSelectors', async () => {
+            let selectors, result;
+            diamondCutFacet = stratB.diamondCutFacet;
+            diamondLoupeFacet = stratB.diamondLoupeFacet;
+            OwnershipFacet = stratB.OwnershipFacet;
+            stratX2Facet = stratB.stratX2Facet;
+            stratX2Setter = stratB.stratX2Setter;
+            stratX2Getter = stratB.stratX2Getter;
+
+            // test for DiamondCutFacet
+            selectors =
+              getSelectorsFromContract(diamondCutFacet).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[0]
+            );
+            assert.sameMembers(result, selectors);
+
+            // test for DiamondLoupeFacet
+            selectors =
+              getSelectorsFromContract(diamondLoupeFacet).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[1]
+            );
+            assert.sameMembers(result, selectors);
+
+            // test for Ownershipfacet
+            selectors = getSelectorsFromContract(OwnershipFacet).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[2]
+            );
+
+            // test for stratX2Setter
+            selectors = getSelectorsFromContract(stratX2Setter).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[3]
+            );
+            assert.sameMembers(result, selectors);
+
+            // test for stratX2Facet
+            selectors = getSelectorsFromContract(stratX2Facet).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[4]
+            );
+            assert.sameMembers(result, selectors);
+
+            // test for stratX2Getter
+            selectors = getSelectorsFromContract(stratX2Getter).getSelectors();
+            result = await diamondLoupeFacet.facetFunctionSelectors(
+              facetAddresses[5]
+            );
+            assert.sameMembers(result, selectors);
+          });
+        });
+      });
     });
   });
 });

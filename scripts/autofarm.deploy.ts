@@ -5,38 +5,23 @@
 // Runtime Environment's members available in the global scope.
 import { ethers, network } from 'hardhat';
 import { getSelectorsFromContract, FacetCutAction } from './libraries';
-import { main } from '../scripts/helpers/token';
-import { Contract } from 'ethers';
-import { AutoFarmV2, StratX2, IERC20 } from '../typechain-types';
 import * as fs from 'fs';
-// if (!fs.existsSync('Build')) {
-//   fs.mkdir('Build', (err) => {
-//     console.log('File created');
-//   });
 
 fs.mkdir('Build', (err) => {
   console.log('File created');
 });
-// }
 
-export async function deployDiamond() {
-  let data = await main();
-  let matic: Contract | IERC20 = data.matic;
-  let bitcoin: Contract | IERC20 = data.bitcoin;
-  let autoV2: Contract = data.autoV2;
-  let farmA: Contract | AutoFarmV2 = data.farmA;
-  let farmB: Contract | AutoFarmV2 = data.farmB;
-  let owner = data.owner;
-  let stratA: Contract | StratX2 = data.stratA;
-  let stratB: Contract | StratX2 = data.stratB;
-  let want: Contract | IERC20 = data.want;
-  let autoV21: Contract | IERC20 = data.autoV21;
-  let [reward, otherAccount] = await ethers.getSigners();
-
-  console.log('**** Deploying diamond ...');
+export async function deployAutofarmDiamond(args) {
+  const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+  await network.provider.request({
+    method: 'hardhat_impersonateAccount',
+    params: [address],
+  });
+  const owner = await ethers.getSigner(address);
+  console.log('**** Deploying AutoFarm diamond ...');
   // deploy DiamondCutFacet
   const DiamondCutFacet = await ethers.getContractFactory('DiamondCutFacet');
-  const diamondCutFacet = await DiamondCutFacet.deploy();
+  let diamondCutFacet = await DiamondCutFacet.deploy();
   await diamondCutFacet.deployed();
 
   let diamondCutFacetData = {
@@ -56,8 +41,13 @@ export async function deployDiamond() {
 
   // deploy Diamond
   const Diamond = await ethers.getContractFactory('Diamond');
-  const diamond = await Diamond.deploy(owner.address, diamondCutFacet.address);
+  const diamond = await Diamond.connect(owner).deploy(
+    owner.address,
+    diamondCutFacet.address
+  );
   await diamond.deployed();
+
+  let diamondAddress: string = diamond.address.toString();
 
   let diamondFacetData = {
     address: diamond.address,
@@ -96,17 +86,16 @@ export async function deployDiamond() {
   // console.log("Deploying facets");
   const FacetNames = [
     'DiamondLoupeFacet',
-    'OwnershipFacet',
-    'StratX2SetterFacet',
-    'StratX2Facet',
-    'StratX2GetterFacet',
+    //'OwnershipFacet',
+    'AutoFarmFacet',
+    'AutoFarmV2GetterFacet',
   ];
   const cut = [];
   let fileData = [];
   for (const facetName of FacetNames) {
     const Facet = await ethers.getContractFactory(facetName);
-    const facet = await Facet.deploy();
-    await facet.deployed();
+    const facet = await Facet.connect(owner).deploy();
+    await facet.connect(owner).deployed();
     fileData.push({
       address: facet.address,
       network: {
@@ -129,33 +118,8 @@ export async function deployDiamond() {
   //console.log('Diamond Cut: ', cut);
   const diamondCut = await ethers.getContractAt('IDiamondCut', diamond.address);
   const diamondInitFunctionCall = diamondInit.interface.encodeFunctionData(
-    'init',
-    [
-      [
-        '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-        owner.address,
-        farmA.address,
-        autoV2.address,
-        want.address,
-        matic.address,
-        bitcoin.address,
-        autoV21.address,
-        farmB.address,
-        '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
-        reward.address,
-        '0x000000000000000000000000000000000000dEaD',
-      ],
-      0,
-      false,
-      false,
-      true,
-      [autoV21.address, bitcoin.address, autoV2.address],
-      [autoV21.address, matic.address],
-      [autoV21.address, bitcoin.address],
-      [matic.address, autoV21.address],
-      [bitcoin.address, autoV21.address],
-      [70, 150, 9990, 10000],
-    ]
+    'autofarmInit',
+    [args]
   );
 
   const tx = await diamondCut
@@ -167,10 +131,6 @@ export async function deployDiamond() {
   // console.log("returned status: ", receipt);
   if (!receipt.status) throw Error(`Diamond upgrade failed: ${tx.hash}`);
 
-  let diamondAddress: string = diamond.address;
-  await farmA.connect(owner).add(1, want.address, false, stratA.address);
-  await farmB.connect(owner).add(1, want.address, false, stratB.address);
-
   let DiamondLoupeFacetData = {
     fileData: fileData[0],
   };
@@ -179,53 +139,63 @@ export async function deployDiamond() {
     JSON.stringify(DiamondLoupeFacetData, null, 2)
   );
 
-  let StratX2SetterData = {
+  let AutoFarmFacetData = {
     fileData: fileData[2],
   };
   fs.writeFileSync(
-    'Build/StratX2Setter.json',
-    JSON.stringify(StratX2SetterData, null, 2)
+    'Build/AutoFarmFacet.json',
+    JSON.stringify(AutoFarmFacetData, null, 2)
   );
-  let StratX2FacetData = {
+  let AutoFarmV2GetterFacetData = {
     fileData: fileData[3],
   };
   fs.writeFileSync(
-    'Build/StratX2Facet.json',
-    JSON.stringify(StratX2FacetData, null, 2)
+    'Build/AutoFarmV2GetterFacet.json',
+    JSON.stringify(AutoFarmV2GetterFacetData, null, 2)
   );
 
-  let StratX2GetterData = {
-    fileData: fileData[4],
-  };
-  fs.writeFileSync(
-    'Build/StratX2GetterFacet.json',
-    JSON.stringify(StratX2GetterData, null, 2)
+  console.log('**** Autofarm Diamond deploy end');
+
+  diamondCutFacet = await ethers.getContractAt(
+    'DiamondCutFacet',
+    diamondAddress
   );
 
-  console.log('**** Diamond deploy end');
+  let diamondLoupeFacet = await ethers.getContractAt(
+    'DiamondLoupeFacet',
+    diamondAddress
+  );
+  let OwnershipFacet = await ethers.getContractAt(
+    'OwnershipFacet',
+    diamondAddress
+  );
+
+  let autoFarmFacet = await ethers.getContractAt(
+    'AutoFarmFacet',
+    diamondAddress
+  );
+  let autoFarmV2GetterFacet = await ethers.getContractAt(
+    'AutoFarmV2GetterFacet',
+    diamondAddress
+  );
+
   return {
-    matic,
-    bitcoin,
-    autoV2,
-    farmA,
-    farmB,
-    owner,
-    otherAccount,
-    stratA,
-    stratB,
-    want,
-    autoV21,
-    reward,
     diamondAddress,
+    diamondInit,
+    diamondCutFacet,
+    autoFarmV2GetterFacet,
+    autoFarmFacet,
+    OwnershipFacet,
+    diamondLoupeFacet,
   };
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-if (require.main === module) {
-  deployDiamond()
-    .then(() => console.log('deployment success'))
-    .catch((error) => {
-      console.error(error);
-    });
-}
+// if (require.main === module) {
+//   deployDiamond()
+//     .then(() => console.log('deployment success'))
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// }

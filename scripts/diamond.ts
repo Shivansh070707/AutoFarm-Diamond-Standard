@@ -1,6 +1,6 @@
 import { Contract } from 'ethers';
 import { ethers } from 'hardhat';
-import { deployDiamond } from '../scripts/deploy';
+import { deployDiamond } from './stratx2.deploy';
 import { DiamondCutFacet, DiamondLoupeFacet } from '../typechain-types';
 
 export async function deploy() {

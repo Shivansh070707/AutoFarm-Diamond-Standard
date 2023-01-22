@@ -5,11 +5,10 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "../../interfaces/IAutoToken.sol";
 import "../../interfaces/IStrategy.sol";
 
-contract AutoFarmFacet is Ownable, ReentrancyGuard {
+contract AutoFarmFacet is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -19,6 +18,10 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
         uint256 indexed pid,
         uint256 amount
     );
+
+    function owner() public view returns (address owner_) {
+        owner_ = LibDiamond.contractOwner();
+    }
 
     // Want tokens moved from user -> AUTOFarm (auto allocation) -> Strat (compounding)
     function deposit(uint256 _pid, uint256 _wantAmt) external nonReentrant {
@@ -54,11 +57,9 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
         withdraw(_pid, type(uint256).max);
     }
 
-    function inCaseTokensGetStuck(address _token, uint256 _amount)
-        external
-        onlyOwner
-    {
+    function inCaseTokensGetStuck(address _token, uint256 _amount) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        require(msg.sender == a.owner, "Not Owner");
         require(_token != a.autoV2, "!safe");
         IERC20(_token).safeTransfer(msg.sender, _amount);
     }
@@ -89,8 +90,9 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
         address _want,
         bool _withUpdate,
         address _strat
-    ) external onlyOwner {
+    ) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        require(msg.sender == a.owner, "Not Owner");
         if (_withUpdate) {
             massUpdatePools();
         }
@@ -114,8 +116,9 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
         uint256 _pid,
         uint256 _allocPoint,
         bool _withUpdate
-    ) external onlyOwner {
+    ) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        require(msg.sender == a.owner, "Not Owner");
         if (_withUpdate) {
             massUpdatePools();
         }
@@ -167,6 +170,11 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
             return 0;
         }
         return (user.shares * (wantLockedTotal)) / (sharesTotal);
+    }
+
+    function poolLength() external view returns (uint256) {
+        LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        return a.poolInfo.length;
     }
 
     // Update reward variables for all pools. Be careful of gas spending!

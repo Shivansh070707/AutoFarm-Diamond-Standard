@@ -24,6 +24,7 @@ contract DiamondInit {
 
     function autofarmInit(address _autoV2) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        a.owner = msg.sender;
         a.autoV2 = _autoV2;
         a.burnAddress = 0x000000000000000000000000000000000000dEaD;
         a.ownerAUTOReward = 138; // 12%
@@ -53,6 +54,7 @@ contract DiamondInit {
         uint256[] memory _num
     ) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
+        s.owner = msg.sender;
         s.wbnbAddress = _addresses[0];
         s.govAddress = _addresses[1];
         s.autoFarmAddress = _addresses[2];
