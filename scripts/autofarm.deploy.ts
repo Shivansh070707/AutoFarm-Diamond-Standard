@@ -24,8 +24,7 @@ export async function deployAutofarmDiamond(args: any) {
   console.log('**** Deploying AutoFarm diamond ...');
   // deploy DiamondCutFacet
   const DiamondCutFacet = await ethers.getContractFactory('DiamondCutFacet');
-  let diamondCutFacet: DiamondCutFacet | Contract =
-    await DiamondCutFacet.deploy();
+  let diamondCutFacet: DiamondCutFacet = await DiamondCutFacet.deploy();
   await diamondCutFacet.deployed();
 
   let diamondCutFacetData = {

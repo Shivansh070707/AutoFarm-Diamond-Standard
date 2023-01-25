@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat';
 import { main } from './helpers/token';
-import { ERC20, Ownable } from '../typechain-types';
+import { ERC20, Liquidity, Ownable } from '../typechain-types';
 import { deployAutofarmDiamond } from './autofarm.deploy';
 import { deployStratDiamond } from './stratx2.deploy';
 import { Farm } from './interfaces/farm';
@@ -17,7 +17,7 @@ export async function initializer() {
   let [reward, otherAccount] = await ethers.getSigners();
   let xrp: Ownable | ERC20 = data.xrp;
   let ada: Ownable | ERC20 = data.ada;
-  let pool = data.pool;
+  let pool: Liquidity = data.pool;
   let farmA: Farm = await deployAutofarmDiamond(autoV2.address);
   let farmB: Farm = await deployAutofarmDiamond(autoV21.address);
   let stratA: Strat = await deployStratDiamond([
