@@ -6,31 +6,35 @@
 import { ethers, network } from 'hardhat';
 import { getSelectorsFromContract, FacetCutAction } from './libraries';
 import * as fs from 'fs';
+import { Contract } from 'ethers';
+import { DiamondCutFacet } from '../typechain-types';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 fs.mkdir('Build', (err) => {
   console.log('File created');
 });
 
-export async function deployAutofarmDiamond(args) {
+export async function deployAutofarmDiamond(args: any) {
   const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
   await network.provider.request({
     method: 'hardhat_impersonateAccount',
     params: [address],
   });
-  const owner = await ethers.getSigner(address);
+  const owner: SignerWithAddress = await ethers.getSigner(address);
   console.log('**** Deploying AutoFarm diamond ...');
   // deploy DiamondCutFacet
   const DiamondCutFacet = await ethers.getContractFactory('DiamondCutFacet');
-  let diamondCutFacet = await DiamondCutFacet.deploy();
+  let diamondCutFacet: DiamondCutFacet | Contract =
+    await DiamondCutFacet.deploy();
   await diamondCutFacet.deployed();
 
   let diamondCutFacetData = {
     address: diamondCutFacet.address,
     network: {
-      name: diamondCutFacet.provider._network.name,
-      chainId: diamondCutFacet.provider.network.chainId,
+      name: (await diamondCutFacet.provider.getNetwork()).name,
+      chainId: (await diamondCutFacet.provider.getNetwork()).chainId,
     },
-    abi: JSON.parse(diamondCutFacet.interface.format('json')),
+    abi: JSON.parse(String(diamondCutFacet.interface.format('json'))),
   };
   fs.writeFileSync(
     'Build/DiamondCutFacet.json',
@@ -52,10 +56,10 @@ export async function deployAutofarmDiamond(args) {
   let diamondFacetData = {
     address: diamond.address,
     network: {
-      name: diamond.provider._network.name,
-      chainId: diamond.provider.network.chainId,
+      name: (await diamond.provider.getNetwork()).name,
+      chainId: (await diamond.provider.getNetwork()).chainId,
     },
-    abi: JSON.parse(diamond.interface.format('json')),
+    abi: JSON.parse(String(diamond.interface.format('json'))),
   };
   fs.writeFileSync(
     'Build/Diamond.json',
@@ -72,10 +76,10 @@ export async function deployAutofarmDiamond(args) {
   let diamondInitFacetData = {
     address: diamondInit.address,
     network: {
-      name: diamondInit.provider._network.name,
-      chainId: diamondInit.provider.network.chainId,
+      name: (await diamondInit.provider.getNetwork()).name,
+      chainId: (await diamondInit.provider.getNetwork()).chainId,
     },
-    abi: JSON.parse(diamondInit.interface.format('json')),
+    abi: JSON.parse(String(diamondInit.interface.format('json'))),
   };
   fs.writeFileSync(
     'Build/DiamondInit.json',
@@ -99,10 +103,10 @@ export async function deployAutofarmDiamond(args) {
     fileData.push({
       address: facet.address,
       network: {
-        name: facet.provider._network.name,
-        chainId: facet.provider.network.chainId,
+        name: (await facet.provider.getNetwork()).name,
+        chainId: (await facet.provider.getNetwork()).chainId,
       },
-      abi: JSON.parse(facet.interface.format('json')),
+      abi: JSON.parse(String(facet.interface.format('json'))),
     });
 
     console.log(`${facetName} deployed at ${facet.address}`);
@@ -189,13 +193,3 @@ export async function deployAutofarmDiamond(args) {
     diamondLoupeFacet,
   };
 }
-
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-// if (require.main === module) {
-//   deployDiamond()
-//     .then(() => console.log('deployment success'))
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// }

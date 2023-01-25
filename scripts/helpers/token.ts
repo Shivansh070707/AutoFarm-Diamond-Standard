@@ -1,5 +1,6 @@
 import { ethers, network } from 'hardhat';
-import { ERC20, Ownable } from '../../typechain-types';
+import { ERC20, Liquidity, Ownable } from '../../typechain-types';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 export async function main() {
   let matic: Ownable | ERC20;
@@ -7,12 +8,12 @@ export async function main() {
   let ada: Ownable | ERC20;
   let xrp: Ownable | ERC20;
   let autoV2: Ownable | ERC20;
-  let owner;
-  let otherAccount;
-  let pool;
+  let owner: SignerWithAddress;
+  let otherAccount: SignerWithAddress;
+  let pool: Liquidity;
   let want: Ownable | ERC20;
   let autoV21: Ownable | ERC20;
-  let reward;
+  let reward: SignerWithAddress;
 
   const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
   await network.provider.request({
@@ -53,26 +54,26 @@ export async function main() {
   /*
     Approving Pool address various tokens 
     */
-  await matic
+  await (matic as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('100'));
-  await bitcoin
+  await (bitcoin as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('150'));
-  await autoV21
+  await (autoV21 as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('100'));
-  await ada
+  await (ada as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('150'));
-  await xrp
+  await (xrp as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('150'));
 
-  await autoV2
+  await (autoV2 as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('100'));
-  await autoV21
+  await (autoV21 as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('100'));
   /*
@@ -183,10 +184,3 @@ export async function main() {
     reward,
   };
 }
-
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-// main().catch((error) => {
-//   console.error(error);
-//   process.exitCode = 1;
-// });

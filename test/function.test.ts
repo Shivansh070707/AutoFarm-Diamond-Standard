@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { Contract } from 'ethers';
 import { ethers } from 'hardhat';
 import { initializer } from '../scripts/initFunction';
 import {
@@ -12,7 +11,13 @@ import {
   StratX2GetterFacet,
   StratX2SetterFacet,
 } from '../typechain-types';
+import { BigNumber } from 'ethers';
+
 import { time } from '@nomicfoundation/hardhat-network-helpers';
+import { Farm } from '../scripts/interfaces/farm';
+import { Strat } from '../scripts/interfaces/strat';
+import { Data } from '../scripts/interfaces/data';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 describe('Test', () => {
   let stratX2Facet: StratX2Facet;
@@ -20,15 +25,15 @@ describe('Test', () => {
   let stratX2Getter: StratX2GetterFacet;
   let autoFarmFacet: AutoFarmFacet;
   let autoFarmGetter: AutoFarmV2GetterFacet;
-  let farmA: object;
-  let farmB: object;
-  let owner: any;
-  let stratB: any;
-  let stratA: any;
-  let want: Ownable | ERC20;
-  let autoV2: Contract | Ownable;
-  let autoV21: Contract | Ownable;
-  let data: object;
+  let farmA: Farm;
+  let farmB: Farm;
+  let owner: SignerWithAddress;
+  let stratB: Strat;
+  let stratA: Strat;
+  let want: Ownable | IERC20;
+  let autoV2: IERC20 | Ownable;
+  let autoV21: IERC20 | Ownable;
+  let data: Data;
 
   before(async () => {
     data = await initializer();
@@ -43,20 +48,24 @@ describe('Test', () => {
   });
   describe('AutoFarm Facet Tests ', () => {
     it('should transfer ownership of both autotokens to autofarm contract', async () => {
-      await autoV2.connect(owner).transferOwnership(farmA.diamondAddress);
-      await autoV21.connect(owner).transferOwnership(farmB.diamondAddress);
-      expect(await autoV2.owner()).to.equal(farmA.diamondAddress);
-      expect(await autoV21.owner()).to.equal(farmB.diamondAddress);
+      await (autoV2 as Ownable)
+        .connect(owner)
+        .transferOwnership(farmA.diamondAddress);
+      await (autoV21 as Ownable)
+        .connect(owner)
+        .transferOwnership(farmB.diamondAddress);
+      expect(await (autoV2 as Ownable).owner()).to.equal(farmA.diamondAddress);
+      expect(await (autoV21 as Ownable).owner()).to.equal(farmB.diamondAddress);
     });
     it('should pool new pool in Both Farms', async () => {
-      // Adding First Pool in Both the farm A
+      // Adding First Pool in Both the Farm A
       autoFarmFacet = farmA.autoFarmFacet;
 
       await autoFarmFacet
         .connect(owner)
         .add(1, want.address, false, stratA.diamondAddress);
       expect(await autoFarmFacet.poolLength()).to.equal(1);
-      // Adding First Pool in Both the farm B
+      // Adding First Pool in Both the Farm B
 
       autoFarmFacet = farmB.autoFarmFacet;
       await autoFarmFacet
@@ -65,8 +74,8 @@ describe('Test', () => {
       expect(await autoFarmFacet.poolLength()).to.equal(1);
     });
     it('Should deposit want tokens in farmA and want tokens will be stored in FarmB', async () => {
-      //Approving want tokens to farm address
-      await want
+      //Approving want tokens to Farm address
+      await (want as ERC20)
         .connect(owner)
         .approve(farmA.diamondAddress, ethers.utils.parseUnits('10', 'ether'));
 
@@ -96,14 +105,18 @@ describe('Test', () => {
       let currentBlockTime = await time.latest();
       let one_day = currentBlockTime + 24 * 60 * 60;
       await time.increaseTo(one_day);
-      let earn_balance_before = await autoV21.balanceOf(owner.address);
+      let earn_balance_before: BigNumber = await (autoV21 as ERC20).balanceOf(
+        owner.address
+      );
 
       await autoFarmFacet
         .connect(owner)
         .withdraw(0, ethers.utils.parseUnits('1', 'ether'));
-      let earn_balance_after = await autoV21.balanceOf(owner.address);
+      let earn_balance_after: BigNumber = await (autoV21 as ERC20).balanceOf(
+        owner.address
+      );
 
-      expect(earn_balance_after - earn_balance_before).to.be.greaterThan(0);
+      expect(earn_balance_after.sub(earn_balance_before)).to.be.greaterThan(0);
     });
   });
   describe('AutoFarm Getter Test', () => {
@@ -125,10 +138,10 @@ describe('Test', () => {
       expect(slippageFactor).to.equal(950);
     });
     it('should deposit want tokens in diamond StratX', async () => {
-      console.log(await want.balanceOf(owner.address));
+      console.log(await (want as ERC20).balanceOf(owner.address));
       stratX2Facet = stratA.stratX2Facet;
 
-      await want
+      await (want as ERC20)
         .connect(owner)
         .approve(stratA.diamondAddress, ethers.utils.parseUnits('10', 'ether'));
 
@@ -149,17 +162,24 @@ describe('Test', () => {
       const one_year = currentBlockTime + 365 * 24 * 60 * 60;
       await time.increaseTo(one_year);
 
-      let want_before = await want.balanceOf(stratB.diamondAddress);
+      let want_before: BigNumber = await (want as ERC20).balanceOf(
+        stratB.diamondAddress
+      );
       await stratX2Facet.connect(owner).earn();
-      let want_after = await want.balanceOf(stratB.diamondAddress);
-      expect(want_after - want_before).to.be.greaterThan(0);
+      let want_after: BigNumber = await (want as ERC20).balanceOf(
+        stratB.diamondAddress
+      );
+      expect(want_after.sub(want_before)).to.be.greaterThan(0);
     });
     it('Should convert dust to earn Tokens', async () => {
-      let earn_before = await autoV21.balanceOf(stratA.diamondAddress);
+      let earn_before: BigNumber = await (autoV21 as ERC20).balanceOf(
+        stratA.diamondAddress
+      );
       await stratX2Facet.convertDustToEarned();
-      let earn_after = await autoV21.balanceOf(stratA.diamondAddress);
-
-      expect(earn_after - earn_before).to.be.greaterThan(0);
+      let earn_after: BigNumber = await (autoV21 as ERC20).balanceOf(
+        stratA.diamondAddress
+      );
+      expect(earn_after.sub(earn_before)).to.be.greaterThan(0);
     });
   });
   describe('stratX2Setter', () => {

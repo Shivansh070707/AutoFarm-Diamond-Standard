@@ -8,26 +8,31 @@ import { getSelectorsFromContract, FacetCutAction } from './libraries';
 import { main } from './helpers/token';
 import { Contract } from 'ethers';
 import { deployAutofarmDiamond } from './autofarm.deploy';
-import { DiamondCutFacet, DiamondLoupeFacet, IERC20 } from '../typechain-types';
+import {
+  Diamond,
+  DiamondCutFacet,
+  DiamondInit,
+  DiamondLoupeFacet,
+  IERC20,
+  OwnershipFacet,
+  StratX2Facet,
+  StratX2GetterFacet,
+  StratX2SetterFacet,
+} from '../typechain-types';
 import * as fs from 'fs';
-
-// if (!fs.existsSync('Build')) {
-//   fs.mkdir('Build', (err) => {
-//     console.log('File created');
-//   });
 
 fs.mkdir('Build', (err) => {
   console.log('File created');
 });
 // }
 
-export async function deployStratDiamond(args) {
-  let diamondAddress;
+export async function deployStratDiamond(args: any) {
+  let diamondAddress: string;
 
-  let diamondCutFacet: Contract | DiamondCutFacet;
-  let diamondLoupeFacet: Contract | DiamondLoupeFacet;
+  let diamondCutFacet: DiamondCutFacet;
+  let diamondLoupeFacet: DiamondLoupeFacet;
 
-  let OwnershipFacet: Contract;
+  let OwnershipFacet: OwnershipFacet;
   const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
   await network.provider.request({
     method: 'hardhat_impersonateAccount',
@@ -45,10 +50,10 @@ export async function deployStratDiamond(args) {
   let diamondCutFacetData = {
     address: diamondCutFacet.address,
     network: {
-      name: diamondCutFacet.provider._network.name,
-      chainId: diamondCutFacet.provider.network.chainId,
+      name: (await diamondCutFacet.provider.getNetwork()).name,
+      chainId: (await diamondCutFacet.provider.getNetwork()).chainId,
     },
-    abi: JSON.parse(diamondCutFacet.interface.format('json')),
+    abi: JSON.parse(String(diamondCutFacet.interface.format('json'))),
   };
   fs.writeFileSync(
     'Build/DiamondCutFacet.json',
@@ -59,17 +64,20 @@ export async function deployStratDiamond(args) {
 
   // deploy Diamond
   const Diamond = await ethers.getContractFactory('Diamond');
-  const diamond = await Diamond.deploy(owner.address, diamondCutFacet.address);
+  const diamond: Diamond = await Diamond.deploy(
+    owner.address,
+    diamondCutFacet.address
+  );
   await diamond.deployed();
   diamondAddress = diamond.address;
 
   let diamondFacetData = {
     address: diamond.address,
     network: {
-      name: diamond.provider._network.name,
-      chainId: diamond.provider.network.chainId,
+      name: (await diamond.provider.getNetwork()).name,
+      chainId: (await diamond.provider.getNetwork()).chainId,
     },
-    abi: JSON.parse(diamond.interface.format('json')),
+    abi: JSON.parse(String(diamond.interface.format('json'))),
   };
   fs.writeFileSync(
     'Build/Diamond.json',
@@ -80,16 +88,16 @@ export async function deployStratDiamond(args) {
 
   // deploy DiamondInit
   const DiamondInit = await ethers.getContractFactory('DiamondInit');
-  const diamondInit = await DiamondInit.deploy();
+  const diamondInit: DiamondInit = await DiamondInit.deploy();
   await diamondInit.deployed();
 
   let diamondInitFacetData = {
     address: diamondInit.address,
     network: {
-      name: diamondInit.provider._network.name,
-      chainId: diamondInit.provider.network.chainId,
+      name: (await diamondInit.provider.getNetwork()).name,
+      chainId: (await diamondInit.provider.getNetwork()).chainId,
     },
-    abi: JSON.parse(diamondInit.interface.format('json')),
+    abi: JSON.parse(String(diamondInit.interface.format('json'))),
   };
   fs.writeFileSync(
     'Build/DiamondInit.json',
@@ -114,10 +122,10 @@ export async function deployStratDiamond(args) {
     fileData.push({
       address: facet.address,
       network: {
-        name: facet.provider._network.name,
-        chainId: facet.provider.network.chainId,
+        name: (await facet.provider.getNetwork()).name,
+        chainId: (await facet.provider.getNetwork()).chainId,
       },
-      abi: JSON.parse(facet.interface.format('json')),
+      abi: JSON.parse(String(facet.interface.format('json'))),
     });
 
     console.log(`${facetName} deployed at ${facet.address}`);
@@ -190,12 +198,15 @@ export async function deployStratDiamond(args) {
   );
   OwnershipFacet = await ethers.getContractAt('OwnershipFacet', diamondAddress);
 
-  let stratX2Facet = await ethers.getContractAt('StratX2Facet', diamondAddress);
-  let stratX2Setter = await ethers.getContractAt(
+  let stratX2Facet: StratX2Facet = await ethers.getContractAt(
+    'StratX2Facet',
+    diamondAddress
+  );
+  let stratX2Setter: StratX2SetterFacet = await ethers.getContractAt(
     'StratX2SetterFacet',
     diamondAddress
   );
-  let stratX2Getter = await ethers.getContractAt(
+  let stratX2Getter: StratX2GetterFacet = await ethers.getContractAt(
     'StratX2GetterFacet',
     diamondAddress
   );
@@ -210,13 +221,3 @@ export async function deployStratDiamond(args) {
     OwnershipFacet,
   };
 }
-
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-// if (require.main === module) {
-//   deployDiamond()
-//     .then(() => console.log('deployment success'))
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// }

@@ -3,6 +3,8 @@ import { main } from './helpers/token';
 import { ERC20, Ownable } from '../typechain-types';
 import { deployAutofarmDiamond } from './autofarm.deploy';
 import { deployStratDiamond } from './stratx2.deploy';
+import { Farm } from './interfaces/farm';
+import { Strat } from './interfaces/strat';
 
 export async function initializer() {
   let data = await main();
@@ -16,21 +18,19 @@ export async function initializer() {
   let xrp: Ownable | ERC20 = data.xrp;
   let ada: Ownable | ERC20 = data.ada;
   let pool = data.pool;
-  let farmA: object = await deployAutofarmDiamond(autoV2.address);
-  let farmB: object = await deployAutofarmDiamond(autoV21.address);
-  let farmAdiamondAddress: string = farmA.diamondAddress;
-  let farmBdiamondAddress: string = farmB.diamondAddress;
-  let stratA = await deployStratDiamond([
+  let farmA: Farm = await deployAutofarmDiamond(autoV2.address);
+  let farmB: Farm = await deployAutofarmDiamond(autoV21.address);
+  let stratA: Strat = await deployStratDiamond([
     [
       '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
       owner.address,
-      farmAdiamondAddress,
+      farmA.diamondAddress,
       autoV2.address,
       want.address,
       matic.address,
       bitcoin.address,
       autoV21.address,
-      farmBdiamondAddress,
+      farmB.diamondAddress,
       '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
       reward.address,
       '0x000000000000000000000000000000000000dEaD',
@@ -50,13 +50,13 @@ export async function initializer() {
     [
       '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
       owner.address,
-      farmBdiamondAddress,
+      farmB.diamondAddress,
       xrp.address,
       want.address,
       matic.address,
       bitcoin.address,
       xrp.address,
-      farmAdiamondAddress,
+      farmA.diamondAddress,
       '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
       reward.address,
       '0x000000000000000000000000000000000000dEaD',

@@ -2,25 +2,39 @@ import { assert } from 'chai';
 import { Contract } from 'ethers';
 import { initializer } from '../scripts/initFunction';
 import { FacetCutAction, getSelectorsFromContract } from '../scripts/libraries';
-import { DiamondCutFacet, DiamondLoupeFacet, IERC20 } from '../typechain-types';
+import {
+  AutoFarmFacet,
+  AutoFarmV2GetterFacet,
+  DiamondCutFacet,
+  DiamondLoupeFacet,
+  ERC20,
+  OwnershipFacet,
+  StratX2Facet,
+  StratX2GetterFacet,
+  StratX2SetterFacet,
+} from '../typechain-types';
+import { Data } from '../scripts/interfaces/data';
+import { Farm } from '../scripts/interfaces/farm';
+import { Strat } from '../scripts/interfaces/strat';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 describe('Test', () => {
-  let diamondCutFacet: Contract | DiamondCutFacet;
-  let diamondLoupeFacet: Contract | DiamondLoupeFacet;
-  let stratX2Facet;
-  let stratX2Setter: Contract;
-  let stratX2Getter: Contract;
-  let autoFarmFacet;
-  let autoFarmGetter;
-  let OwnershipFacet: Contract;
-  let farmA;
-  let farmB;
-  let owner: any;
-  let stratB: object;
-  let stratA: any;
-  let want: Contract | IERC20;
-  let autoV21: Contract | IERC20;
-  let data;
+  let diamondCutFacet: DiamondCutFacet;
+  let diamondLoupeFacet: DiamondLoupeFacet;
+  let stratX2Facet: StratX2Facet;
+  let stratX2Setter: StratX2SetterFacet;
+  let stratX2Getter: StratX2GetterFacet;
+  let autoFarmFacet: AutoFarmFacet;
+  let autoFarmGetter: AutoFarmV2GetterFacet;
+  let OwnershipFacet: OwnershipFacet;
+  let farmA: Farm;
+  let farmB: Farm;
+  let owner: SignerWithAddress;
+  let stratB: Strat;
+  let stratA: Strat;
+  let want: Contract | ERC20;
+  let autoV21: Contract | ERC20;
+  let data: Data;
   let facetAddresses: string[]; // DiamondCutFacet, DiamondLoupeFacet, StratX2Facet
 
   before(async () => {
