@@ -90,7 +90,7 @@ export async function deployAutofarmDiamond(args: any) {
   // console.log("Deploying facets");
   const FacetNames = [
     'DiamondLoupeFacet',
-    //'OwnershipFacet',
+    'OwnershipFacet',
     'AutoFarmFacet',
     'AutoFarmV2GetterFacet',
   ];

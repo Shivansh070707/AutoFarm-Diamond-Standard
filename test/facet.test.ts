@@ -50,9 +50,9 @@ describe('Test', () => {
 
   describe('test - diamond', () => {
     describe('farmA', () => {
-      it('should have 4 facets -- call to facetAddresses', async () => {
+      it('should have 5 facets -- call to facetAddresses', async () => {
         facetAddresses = await farmA.diamondLoupeFacet.facetAddresses();
-        assert(facetAddresses.length === 4);
+        assert(facetAddresses.length === 5);
       });
 
       it('should have the right function selectors -- call to faceFunctionSelectors', async () => {
@@ -61,6 +61,7 @@ describe('Test', () => {
         diamondLoupeFacet = farmA.diamondLoupeFacet;
         autoFarmFacet = farmA.autoFarmFacet;
         autoFarmGetter = farmA.autoFarmV2GetterFacet;
+        OwnershipFacet = farmA.OwnershipFacet;
 
         // test for DiamondCutFacet
         selectors = getSelectorsFromContract(diamondCutFacet).getSelectors();
@@ -76,24 +77,29 @@ describe('Test', () => {
         );
         assert.sameMembers(result, selectors);
 
+        // test for Ownershipfacet
+        selectors = getSelectorsFromContract(OwnershipFacet).getSelectors();
+        result = await diamondLoupeFacet.facetFunctionSelectors(
+          facetAddresses[2]
+        );
         // test for autoFarmFacet
         selectors = getSelectorsFromContract(autoFarmFacet).getSelectors();
         result = await diamondLoupeFacet.facetFunctionSelectors(
-          facetAddresses[2]
+          facetAddresses[3]
         );
         assert.sameMembers(result, selectors);
 
         // test for autoFarmGetter
         selectors = getSelectorsFromContract(autoFarmGetter).getSelectors();
         result = await diamondLoupeFacet.facetFunctionSelectors(
-          facetAddresses[3]
+          facetAddresses[4]
         );
         assert.sameMembers(result, selectors);
       });
       describe('farmB', () => {
-        it('should have 4 facets -- call to facetAddresses', async () => {
+        it('should have 5 facets -- call to facetAddresses', async () => {
           facetAddresses = await farmB.diamondLoupeFacet.facetAddresses();
-          assert(facetAddresses.length === 4);
+          assert(facetAddresses.length === 5);
         });
 
         it('should have the right function selectors -- call to faceFunctionSelectors', async () => {
@@ -102,6 +108,7 @@ describe('Test', () => {
           diamondLoupeFacet = farmB.diamondLoupeFacet;
           autoFarmFacet = farmB.autoFarmFacet;
           autoFarmGetter = farmB.autoFarmV2GetterFacet;
+          OwnershipFacet = farmB.OwnershipFacet;
 
           // test for DiamondCutFacet
           selectors = getSelectorsFromContract(diamondCutFacet).getSelectors();
@@ -118,17 +125,23 @@ describe('Test', () => {
           );
           assert.sameMembers(result, selectors);
 
+          // test for Ownershipfacet
+          selectors = getSelectorsFromContract(OwnershipFacet).getSelectors();
+          result = await diamondLoupeFacet.facetFunctionSelectors(
+            facetAddresses[2]
+          );
+
           // test for autoFarmFacet
           selectors = getSelectorsFromContract(autoFarmFacet).getSelectors();
           result = await diamondLoupeFacet.facetFunctionSelectors(
-            facetAddresses[2]
+            facetAddresses[3]
           );
           assert.sameMembers(result, selectors);
 
           // test for autoFarmGetter
           selectors = getSelectorsFromContract(autoFarmGetter).getSelectors();
           result = await diamondLoupeFacet.facetFunctionSelectors(
-            facetAddresses[3]
+            facetAddresses[4]
           );
           assert.sameMembers(result, selectors);
         });

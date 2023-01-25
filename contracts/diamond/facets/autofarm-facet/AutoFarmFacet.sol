@@ -19,10 +19,6 @@ contract AutoFarmFacet is ReentrancyGuard {
         uint256 amount
     );
 
-    function owner() public view returns (address owner_) {
-        owner_ = LibDiamond.contractOwner();
-    }
-
     // Want tokens moved from user -> AUTOFarm (auto allocation) -> Strat (compounding)
     function deposit(uint256 _pid, uint256 _wantAmt) external nonReentrant {
         updatePool(_pid);
@@ -253,7 +249,7 @@ contract AutoFarmFacet is ReentrancyGuard {
             (pool.allocPoint)) / (a.totalAllocPoint);
 
         IAutoToken(a.autoV2).mint(
-            owner(),
+            _owner(),
             (autoReward * (a.ownerAUTOReward)) / (1000)
         );
         IAutoToken(a.autoV2).mint(address(this), autoReward);
@@ -286,5 +282,10 @@ contract AutoFarmFacet is ReentrancyGuard {
         } else {
             IERC20(a.autoV2).transfer(_to, _AUTOAmt);
         }
+    }
+
+    function _owner() internal view returns (address owner_) {
+        LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        return a.owner;
     }
 }
