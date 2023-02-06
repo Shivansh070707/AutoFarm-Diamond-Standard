@@ -1,18 +1,27 @@
 import { ethers, network } from 'hardhat';
-import { ERC20, Liquidity, Ownable } from '../../typechain-types';
+import {
+  Bitcoin,
+  ERC20,
+  Liquidity,
+  Matic,
+  Ownable,
+  XRP,
+  Cardano,
+  AUTOv2,
+} from '../../typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 export async function main() {
-  let matic: Ownable | ERC20;
-  let bitcoin: Ownable | ERC20;
-  let ada: Ownable | ERC20;
-  let xrp: Ownable | ERC20;
-  let autoV2: Ownable | ERC20;
+  let matic: Matic;
+  let bitcoin: Bitcoin;
+  let ada: Cardano;
+  let xrp: XRP;
+  let autoV2: AUTOv2;
   let owner: SignerWithAddress;
   let otherAccount: SignerWithAddress;
   let pool: Liquidity;
   let want: Ownable | ERC20;
-  let autoV21: Ownable | ERC20;
+  let autoV21: AUTOv2;
   let reward: SignerWithAddress;
 
   const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';

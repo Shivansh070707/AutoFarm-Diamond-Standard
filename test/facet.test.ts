@@ -16,7 +16,6 @@ import {
 import { Data } from '../scripts/interfaces/data';
 import { Farm } from '../scripts/interfaces/farm';
 import { Strat } from '../scripts/interfaces/strat';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 describe('Test', () => {
   let diamondCutFacet: DiamondCutFacet;
@@ -29,7 +28,6 @@ describe('Test', () => {
   let OwnershipFacet: OwnershipFacet;
   let farmA: Farm;
   let farmB: Farm;
-  let owner: SignerWithAddress;
   let stratB: Strat;
   let stratA: Strat;
   let want: Contract | ERC20;
@@ -45,7 +43,6 @@ describe('Test', () => {
     stratB = data.stratB;
     want = data.want;
     autoV21 = data.autoV21;
-    owner = data.owner;
   });
 
   describe('test - diamond', () => {

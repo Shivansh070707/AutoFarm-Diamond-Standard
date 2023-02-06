@@ -5,9 +5,6 @@
 // Runtime Environment's members available in the global scope.
 import { ethers, network } from 'hardhat';
 import { getSelectorsFromContract, FacetCutAction } from './libraries';
-import { main } from './helpers/token';
-import { Contract } from 'ethers';
-import { deployAutofarmDiamond } from './autofarm.deploy';
 import {
   Diamond,
   DiamondCutFacet,

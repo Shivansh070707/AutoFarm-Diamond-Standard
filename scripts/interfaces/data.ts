@@ -1,15 +1,24 @@
-import { ERC20, Liquidity, Ownable } from '../../typechain-types';
+import {
+  AUTOv2,
+  Bitcoin,
+  Cardano,
+  ERC20,
+  Liquidity,
+  Matic,
+  Ownable,
+  XRP,
+} from '../../typechain-types';
 import { Farm } from './farm';
 import { Strat } from './strat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 export interface Data {
-  matic: Ownable | ERC20;
-  bitcoin: Ownable | ERC20;
-  ada: Ownable | ERC20;
-  xrp: Ownable | ERC20;
-  autoV2: Ownable | ERC20;
-  autoV21: Ownable | ERC20;
+  matic: Matic;
+  bitcoin: Bitcoin;
+  ada: Cardano;
+  xrp: XRP;
+  autoV2: AUTOv2;
+  autoV21: AUTOv2;
   owner: SignerWithAddress;
   otherAccount: SignerWithAddress;
   pool: Liquidity;

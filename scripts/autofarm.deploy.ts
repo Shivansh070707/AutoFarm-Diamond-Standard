@@ -6,8 +6,15 @@
 import { ethers, network } from 'hardhat';
 import { getSelectorsFromContract, FacetCutAction } from './libraries';
 import * as fs from 'fs';
-import { Contract } from 'ethers';
-import { DiamondCutFacet } from '../typechain-types';
+import {
+  AutoFarmFacet,
+  AutoFarmV2GetterFacet,
+  Diamond,
+  DiamondCutFacet,
+  DiamondInit,
+  DiamondLoupeFacet,
+  OwnershipFacet,
+} from '../typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 fs.mkdir('Build', (err) => {
@@ -44,7 +51,7 @@ export async function deployAutofarmDiamond(args: any) {
 
   // deploy Diamond
   const Diamond = await ethers.getContractFactory('Diamond');
-  const diamond = await Diamond.connect(owner).deploy(
+  const diamond: Diamond = await Diamond.connect(owner).deploy(
     owner.address,
     diamondCutFacet.address
   );
@@ -69,7 +76,7 @@ export async function deployAutofarmDiamond(args: any) {
 
   // deploy DiamondInit
   const DiamondInit = await ethers.getContractFactory('DiamondInit');
-  const diamondInit = await DiamondInit.deploy();
+  const diamondInit: DiamondInit = await DiamondInit.deploy();
   await diamondInit.deployed();
 
   let diamondInitFacetData = {
@@ -119,7 +126,10 @@ export async function deployAutofarmDiamond(args: any) {
   }
 
   //console.log('Diamond Cut: ', cut);
-  const diamondCut = await ethers.getContractAt('IDiamondCut', diamond.address);
+  const diamondCut: DiamondCutFacet = await ethers.getContractAt(
+    'IDiamondCut',
+    diamond.address
+  );
   const diamondInitFunctionCall = diamondInit.interface.encodeFunctionData(
     'autofarmInit',
     [args]
@@ -164,20 +174,20 @@ export async function deployAutofarmDiamond(args: any) {
     diamondAddress
   );
 
-  let diamondLoupeFacet = await ethers.getContractAt(
+  let diamondLoupeFacet: DiamondLoupeFacet = await ethers.getContractAt(
     'DiamondLoupeFacet',
     diamondAddress
   );
-  let OwnershipFacet = await ethers.getContractAt(
+  let OwnershipFacet: OwnershipFacet = await ethers.getContractAt(
     'OwnershipFacet',
     diamondAddress
   );
 
-  let autoFarmFacet = await ethers.getContractAt(
+  let autoFarmFacet: AutoFarmFacet = await ethers.getContractAt(
     'AutoFarmFacet',
     diamondAddress
   );
-  let autoFarmV2GetterFacet = await ethers.getContractAt(
+  let autoFarmV2GetterFacet: AutoFarmV2GetterFacet = await ethers.getContractAt(
     'AutoFarmV2GetterFacet',
     diamondAddress
   );

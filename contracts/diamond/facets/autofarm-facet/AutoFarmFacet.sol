@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
 import {LibDiamond} from "../../libraries/LibDiamond.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
@@ -55,7 +56,7 @@ contract AutoFarmFacet is ReentrancyGuard {
 
     function inCaseTokensGetStuck(address _token, uint256 _amount) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
-        require(msg.sender == a.owner, "Not Owner");
+        _onlyOwner(a.owner, msg.sender);
         require(_token != a.autoV2, "!safe");
         IERC20(_token).safeTransfer(msg.sender, _amount);
     }
@@ -88,7 +89,7 @@ contract AutoFarmFacet is ReentrancyGuard {
         address _strat
     ) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
-        require(msg.sender == a.owner, "Not Owner");
+        _onlyOwner(a.owner, msg.sender);
         if (_withUpdate) {
             massUpdatePools();
         }
@@ -114,7 +115,7 @@ contract AutoFarmFacet is ReentrancyGuard {
         bool _withUpdate
     ) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
-        require(msg.sender == a.owner, "Not Owner");
+        _onlyOwner(a.owner, msg.sender);
         if (_withUpdate) {
             massUpdatePools();
         }
@@ -287,5 +288,9 @@ contract AutoFarmFacet is ReentrancyGuard {
     function _owner() internal view returns (address owner_) {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
         return a.owner;
+    }
+
+    function _onlyOwner(address owner, address caller) private pure {
+        require(owner == caller, "Not Owner");
     }
 }

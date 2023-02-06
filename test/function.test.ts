@@ -2,10 +2,10 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import { initializer } from '../scripts/initFunction';
 import {
+  AUTOv2,
   AutoFarmFacet,
   AutoFarmV2GetterFacet,
   ERC20,
-  IERC20,
   Ownable,
   StratX2Facet,
   StratX2GetterFacet,
@@ -30,9 +30,9 @@ describe('Test', () => {
   let owner: SignerWithAddress;
   let stratB: Strat;
   let stratA: Strat;
-  let want: Ownable | IERC20;
-  let autoV2: IERC20 | Ownable;
-  let autoV21: IERC20 | Ownable;
+  let want: Ownable | ERC20;
+  let autoV2: AUTOv2;
+  let autoV21: AUTOv2;
   let data: Data;
 
   before(async () => {
@@ -48,14 +48,10 @@ describe('Test', () => {
   });
   describe('AutoFarm Facet Tests ', () => {
     it('should transfer ownership of both autotokens to autofarm contract', async () => {
-      await (autoV2 as Ownable)
-        .connect(owner)
-        .transferOwnership(farmA.diamondAddress);
-      await (autoV21 as Ownable)
-        .connect(owner)
-        .transferOwnership(farmB.diamondAddress);
-      expect(await (autoV2 as Ownable).owner()).to.equal(farmA.diamondAddress);
-      expect(await (autoV21 as Ownable).owner()).to.equal(farmB.diamondAddress);
+      await autoV2.connect(owner).transferOwnership(farmA.diamondAddress);
+      await autoV21.connect(owner).transferOwnership(farmB.diamondAddress);
+      expect(await autoV2.owner()).to.equal(farmA.diamondAddress);
+      expect(await autoV21.owner()).to.equal(farmB.diamondAddress);
     });
     it('should pool new pool in Both Farms', async () => {
       // Adding First Pool in Both the Farm A
