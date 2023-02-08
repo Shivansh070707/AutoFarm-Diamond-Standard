@@ -19,6 +19,11 @@ contract StratX2GetterFacet {
         return s.isAutoComp;
     }
 
+    function isPaused() external view returns (bool) {
+        LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
+        return s._paused;
+    }
+
     function farmContractAddress() external view returns (address) {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
         return s.farmContractAddress;

@@ -50,7 +50,7 @@ contract AutoFarmFacet is ReentrancyGuard {
         emit Deposit(msg.sender, _pid, _wantAmt);
     }
 
-    function withdrawAll(uint256 _pid) external nonReentrant {
+    function withdrawAll(uint256 _pid) external {
         withdraw(_pid, type(uint256).max);
     }
 

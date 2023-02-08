@@ -1,5 +1,5 @@
 {
-  "address": "0x09120eAED8e4cD86D85a616680151DAA653880F2",
+  "address": "0x0b27a79cb9C0B38eE06Ca3d94DAA68e0Ed17F953",
   "network": {
     "name": "unknown",
     "chainId": 31337
@@ -10,7 +10,7 @@
       "name": "autofarmInit",
       "constant": false,
       "payable": false,
-      "gas": 29000000,
+      "gas": 1099510627775,
       "inputs": [
         {
           "type": "address",
@@ -24,7 +24,7 @@
       "name": "init",
       "constant": false,
       "payable": false,
-      "gas": 29000000,
+      "gas": 1099510627775,
       "inputs": [],
       "outputs": []
     },
@@ -33,7 +33,7 @@
       "name": "stratx2Init",
       "constant": false,
       "payable": false,
-      "gas": 29000000,
+      "gas": 1099510627775,
       "inputs": [
         {
           "type": "address[]",

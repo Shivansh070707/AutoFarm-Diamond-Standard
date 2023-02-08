@@ -1,6 +1,6 @@
 {
   "fileData": {
-    "address": "0xD1760AA0FCD9e64bA4ea43399Ad789CFd63C7809",
+    "address": "0x773330693cb7d5D233348E25809770A32483A940",
     "network": {
       "name": "unknown",
       "chainId": 31337
@@ -12,7 +12,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -26,7 +26,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -40,7 +40,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -54,7 +54,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -68,7 +68,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -82,7 +82,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -96,7 +96,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -110,7 +110,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -124,7 +124,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -138,7 +138,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -152,7 +152,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -166,7 +166,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -180,7 +180,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -194,7 +194,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -208,7 +208,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -222,7 +222,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -236,7 +236,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -250,7 +250,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -264,7 +264,21 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "isPaused",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -278,7 +292,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -292,7 +306,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -306,7 +320,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -320,7 +334,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -334,7 +348,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -348,7 +362,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -362,7 +376,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -376,7 +390,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -390,7 +404,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -404,7 +418,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -418,7 +432,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -432,7 +446,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -446,7 +460,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -460,7 +474,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -474,7 +488,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -488,7 +502,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -502,7 +516,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -516,7 +530,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -530,7 +544,7 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {

@@ -138,10 +138,6 @@ library LibDiamond {
         return msg.sender;
     }
 
-    function _msgData() internal pure returns (bytes calldata) {
-        return msg.data;
-    }
-
     function paused() internal view returns (bool) {
         StratX2Storage storage s = LibDiamond.stratX2Storage();
         return s._paused;
@@ -192,10 +188,6 @@ library LibDiamond {
     }
 
     function contractOwner() internal view returns (address contractOwner_) {
-        contractOwner_ = diamondStorage().contractOwner;
-    }
-
-    function autofarmOwner() internal view returns (address contractOwner_) {
         contractOwner_ = diamondStorage().contractOwner;
     }
 

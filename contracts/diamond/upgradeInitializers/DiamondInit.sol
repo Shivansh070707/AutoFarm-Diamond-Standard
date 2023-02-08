@@ -31,6 +31,7 @@ contract DiamondInit {
         a.autoMaxSupply = 80000e18;
         a.autoPerBlock = 8000000000000000; // auto tokens created per block
         a.startBlock = 3888888;
+        a.totalAllocPoint = 0;
 
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional

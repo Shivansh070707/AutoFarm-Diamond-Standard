@@ -1,6 +1,6 @@
 {
   "fileData": {
-    "address": "0xAe9Ed85dE2670e3112590a2BB17b7283ddF44d9c",
+    "address": "0x408F924BAEC71cC3968614Cb2c58E155A35e6890",
     "network": {
       "name": "unknown",
       "chainId": 31337
@@ -11,7 +11,7 @@
         "name": "convertDustToEarned",
         "constant": false,
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": []
       },
@@ -20,7 +20,7 @@
         "name": "deposit",
         "constant": false,
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -38,7 +38,7 @@
         "name": "earn",
         "constant": false,
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": []
       },
@@ -47,7 +47,7 @@
         "name": "inCaseTokensGetStuck",
         "constant": false,
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [
           {
             "type": "address",
@@ -69,7 +69,7 @@
         "name": "withdraw",
         "constant": false,
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -87,7 +87,7 @@
         "name": "wrapBNB",
         "constant": false,
         "payable": false,
-        "gas": 29000000,
+        "gas": 1099510627775,
         "inputs": [],
         "outputs": []
       }
