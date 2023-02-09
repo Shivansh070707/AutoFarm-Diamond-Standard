@@ -1,7 +1,7 @@
 {
-  "address": "0x92A00fc48Ad3dD4A8b5266a8F467a52Ac784fC83",
+  "address": "0xf274De14171Ab928A5Ec19928cE35FaD91a42B64",
   "network": {
-    "name": "unknown",
+    "name": "localhost",
     "chainId": 31337
   },
   "abi": [

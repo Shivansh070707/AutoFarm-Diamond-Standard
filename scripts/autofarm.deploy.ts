@@ -5,7 +5,7 @@
 // Runtime Environment's members available in the global scope.
 import { ethers, network } from 'hardhat';
 import { getSelectorsFromContract, FacetCutAction } from './libraries';
-import * as fs from 'fs';
+import { storeContract } from './storeContract';
 import {
   AutoFarmFacet,
   AutoFarmV2GetterFacet,
@@ -16,17 +16,8 @@ import {
   OwnershipFacet,
 } from '../typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-const CHAIN = process.env.CHAIN;
-const ENV = process.env.ENV;
 
 export async function deployAutofarmDiamond(args: any, name: string) {
-  if (!Boolean(CHAIN) || !Boolean(ENV)) {
-    console.log(
-      `First set the "CHAIN" and "ENV" variables in .env file at the root folder`
-    );
-    process.exit(1);
-  }
-
   const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
   await network.provider.request({
     method: 'hardhat_impersonateAccount',
@@ -40,23 +31,11 @@ export async function deployAutofarmDiamond(args: any, name: string) {
   let diamondCutFacet: DiamondCutFacet = await DiamondCutFacet.deploy();
   await diamondCutFacet.deployed();
 
-  let diamondCutFacetData = {
-    address: diamondCutFacet.address,
-    network: {
-      name: (await diamondCutFacet.provider.getNetwork()).name,
-      chainId: (await diamondCutFacet.provider.getNetwork()).chainId,
-    },
-    abi: JSON.parse(String(diamondCutFacet.interface.format('json'))),
-  };
-  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
-    if (err) console.error(err);
-  });
-  fs.writeFileSync(
-    `./build/${CHAIN}/${ENV}/${name}/DiamondCutFacet.json`,
-    JSON.stringify(diamondCutFacetData, null, 2),
-    (err) => {
-      if (err) console.error(err);
-    }
+  await storeContract(
+    diamondCutFacet.address,
+    JSON.parse(String(diamondCutFacet.interface.format('json'))),
+    name,
+    'DiamondCutFacet'
   );
 
   console.log('DiamondCutFacet deployed at: ', diamondCutFacet.address);
@@ -71,24 +50,11 @@ export async function deployAutofarmDiamond(args: any, name: string) {
 
   let diamondAddress: string = diamond.address.toString();
 
-  let diamondFacetData = {
-    address: diamond.address,
-    network: {
-      name: (await diamond.provider.getNetwork()).name,
-      chainId: (await diamond.provider.getNetwork()).chainId,
-    },
-    abi: JSON.parse(String(diamond.interface.format('json'))),
-  };
-
-  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
-    if (err) console.error(err);
-  });
-  fs.writeFileSync(
-    `./build/${CHAIN}/${ENV}/${name}/Diamond.json`,
-    JSON.stringify(diamondFacetData, null, 2),
-    (err) => {
-      if (err) console.error(err);
-    }
+  await storeContract(
+    diamond.address,
+    JSON.parse(String(diamond.interface.format('json'))),
+    name,
+    'Diamond'
   );
 
   console.log('Diamond deployed at: ', diamond.address);
@@ -98,23 +64,11 @@ export async function deployAutofarmDiamond(args: any, name: string) {
   const diamondInit: DiamondInit = await DiamondInit.deploy();
   await diamondInit.deployed();
 
-  let diamondInitFacetData = {
-    address: diamondInit.address,
-    network: {
-      name: (await diamondInit.provider.getNetwork()).name,
-      chainId: (await diamondInit.provider.getNetwork()).chainId,
-    },
-    abi: JSON.parse(String(diamondInit.interface.format('json'))),
-  };
-  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
-    if (err) console.error(err);
-  });
-  fs.writeFileSync(
-    `./build/${CHAIN}/${ENV}/${name}/DiamondInit.json`,
-    JSON.stringify(diamondInitFacetData, null, 2),
-    (err) => {
-      if (err) console.error(err);
-    }
+  await storeContract(
+    diamondInit.address,
+    JSON.parse(String(diamondInit.interface.format('json'))),
+    name,
+    'DiamondInit'
   );
 
   console.log('DiamondInit deployed at: ', diamondInit.address);
@@ -134,10 +88,6 @@ export async function deployAutofarmDiamond(args: any, name: string) {
     await facet.connect(owner).deployed();
     fileData.push({
       address: facet.address,
-      network: {
-        name: (await facet.provider.getNetwork()).name,
-        chainId: (await facet.provider.getNetwork()).chainId,
-      },
       abi: JSON.parse(String(facet.interface.format('json'))),
     });
 
@@ -173,42 +123,40 @@ export async function deployAutofarmDiamond(args: any, name: string) {
   let DiamondLoupeFacetData = {
     fileData: fileData[0],
   };
-  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
-    if (err) console.error(err);
-  });
-  fs.writeFileSync(
-    `./build/${CHAIN}/${ENV}/${name}/DiamondLoupeFacet.json`,
-    JSON.stringify(DiamondLoupeFacetData, null, 2),
-    (err) => {
-      if (err) console.error(err);
-    }
+  await storeContract(
+    DiamondLoupeFacetData.fileData.address,
+    DiamondLoupeFacetData.fileData.abi,
+    name,
+    'DiamondLoupeFacet'
   );
+  let OwnershipFacetData = {
+    fileData: fileData[1],
+  };
+  await storeContract(
+    OwnershipFacetData.fileData.address,
+    OwnershipFacetData.fileData.abi,
+    name,
+    'OwnershipFacet'
+  );
+
   let AutoFarmFacetData = {
     fileData: fileData[2],
   };
-  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
-    if (err) console.error(err);
-  });
-  fs.writeFileSync(
-    `./build/${CHAIN}/${ENV}/${name}/AutoFarmFacet.json`,
-    JSON.stringify(AutoFarmFacetData, null, 2),
-    (err) => {
-      if (err) console.error(err);
-    }
+  await storeContract(
+    AutoFarmFacetData.fileData.address,
+    AutoFarmFacetData.fileData.abi,
+    name,
+    'AutoFarmFacet'
   );
 
   let AutoFarmV2GetterFacetData = {
     fileData: fileData[3],
   };
-  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
-    if (err) console.error(err);
-  });
-  fs.writeFileSync(
-    `./build/${CHAIN}/${ENV}/${name}/AutoFarmV2GetterFacet.json`,
-    JSON.stringify(AutoFarmV2GetterFacetData, null, 2),
-    (err) => {
-      if (err) console.error(err);
-    }
+  await storeContract(
+    AutoFarmV2GetterFacetData.fileData.address,
+    AutoFarmV2GetterFacetData.fileData.abi,
+    name,
+    'AutoFarmV2GetterFacet'
   );
 
   console.log('**** Autofarm Diamond deploy end');

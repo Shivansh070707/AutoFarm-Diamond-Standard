@@ -1,105 +1,103 @@
 {
-  "fileData": {
-    "address": "0x6D712CB50297b97b79dE784d10F487C00d7f8c2C",
-    "network": {
-      "name": "unknown",
-      "chainId": 31337
+  "address": "0x4458AcB1185aD869F982D51b5b0b87e23767A3A9",
+  "network": {
+    "name": "localhost",
+    "chainId": 31337
+  },
+  "abi": [
+    {
+      "type": "function",
+      "name": "facetAddress",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "bytes4",
+          "name": "_functionSelector"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "address",
+          "name": "facetAddress_"
+        }
+      ]
     },
-    "abi": [
-      {
-        "type": "function",
-        "name": "facetAddress",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [
-          {
-            "type": "bytes4",
-            "name": "_functionSelector"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "address",
-            "name": "facetAddress_"
-          }
-        ]
-      },
-      {
-        "type": "function",
-        "name": "facetAddresses",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "address[]",
-            "name": "facetAddresses_"
-          }
-        ]
-      },
-      {
-        "type": "function",
-        "name": "facetFunctionSelectors",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [
-          {
-            "type": "address",
-            "name": "_facet"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "bytes4[]",
-            "name": "_facetFunctionSelectors"
-          }
-        ]
-      },
-      {
-        "type": "function",
-        "name": "facets",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "tuple[]",
-            "name": "facets_",
-            "components": [
-              {
-                "type": "address",
-                "name": "facetAddress"
-              },
-              {
-                "type": "bytes4[]",
-                "name": "functionSelectors"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "type": "function",
-        "name": "supportsInterface",
-        "constant": true,
-        "stateMutability": "view",
-        "payable": false,
-        "inputs": [
-          {
-            "type": "bytes4",
-            "name": "_interfaceId"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "bool"
-          }
-        ]
-      }
-    ]
-  }
+    {
+      "type": "function",
+      "name": "facetAddresses",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address[]",
+          "name": "facetAddresses_"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "facetFunctionSelectors",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_facet"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bytes4[]",
+          "name": "_facetFunctionSelectors"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "facets",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "tuple[]",
+          "name": "facets_",
+          "components": [
+            {
+              "type": "address",
+              "name": "facetAddress"
+            },
+            {
+              "type": "bytes4[]",
+              "name": "functionSelectors"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "supportsInterface",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "bytes4",
+          "name": "_interfaceId"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bool"
+        }
+      ]
+    }
+  ]
 }
