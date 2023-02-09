@@ -1,6 +1,6 @@
 {
   "fileData": {
-    "address": "0x7bdd3b028C4796eF0EAf07d11394d0d9d8c24139",
+    "address": "0x49149a233de6E4cD6835971506F47EE5862289c1",
     "network": {
       "name": "unknown",
       "chainId": 31337
@@ -12,7 +12,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "bytes4",
@@ -32,7 +31,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -47,7 +45,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "address",
@@ -67,7 +64,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -92,7 +88,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "bytes4",

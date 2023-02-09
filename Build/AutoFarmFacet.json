@@ -1,6 +1,6 @@
 {
   "fileData": {
-    "address": "0xAe7C7Ab8ecD794d6dD72642F19026d9a0f7E4Fc1",
+    "address": "0x1dd0274cf7198F5e8F622CAF2248428B220B3F34",
     "network": {
       "name": "unknown",
       "chainId": 31337
@@ -77,7 +77,6 @@
         "name": "add",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -103,7 +102,6 @@
         "name": "deposit",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -121,7 +119,6 @@
         "name": "emergencyWithdraw",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -136,7 +133,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -158,7 +154,6 @@
         "name": "inCaseTokensGetStuck",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "address",
@@ -176,7 +171,6 @@
         "name": "massUpdatePools",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": []
       },
@@ -186,7 +180,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -209,7 +202,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -222,7 +214,6 @@
         "name": "set",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -245,7 +236,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -267,7 +257,6 @@
         "name": "updatePool",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -281,7 +270,6 @@
         "name": "withdraw",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -299,7 +287,6 @@
         "name": "withdrawAll",
         "constant": false,
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",

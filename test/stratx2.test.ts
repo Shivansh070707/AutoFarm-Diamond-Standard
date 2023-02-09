@@ -359,9 +359,9 @@ describe('Test', () => {
       );
     });
     it('should set pause and unpause', async () => {
-      stratX2Setter.connect(owner).pause();
+      await stratX2Setter.connect(owner).pause();
       expect(await stratX2Getter.isPaused()).to.equal(true);
-      stratX2Setter.connect(owner).unpause();
+      await stratX2Setter.connect(owner).unpause();
       expect(await stratX2Getter.isPaused()).to.equal(false);
     });
   });
@@ -426,7 +426,7 @@ describe('Test', () => {
     });
     it('should throw error when paused', async () => {
       await stratX2Setter.connect(owner).pause();
-      expect(
+      await expect(
         stratX2Facet.connect(owner).deposit(ethers.utils.parseEther('1'))
       ).to.be.revertedWith('Pausable: paused');
     });

@@ -1,6 +1,6 @@
 {
   "fileData": {
-    "address": "0x5c62157f1a9f6468E49c53C14B837a420DCF3C01",
+    "address": "0xc10dfD6ee5E81DA620C816592562a6c303FcE81d",
     "network": {
       "name": "unknown",
       "chainId": 31337
@@ -12,7 +12,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -26,7 +25,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -40,7 +38,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -54,7 +51,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -68,7 +64,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -82,7 +77,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",
@@ -123,7 +117,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -137,7 +130,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [],
         "outputs": [
           {
@@ -151,7 +143,6 @@
         "constant": true,
         "stateMutability": "view",
         "payable": false,
-        "gas": 1099510627775,
         "inputs": [
           {
             "type": "uint256",

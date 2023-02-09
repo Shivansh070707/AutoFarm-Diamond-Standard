@@ -1,5 +1,5 @@
 {
-  "address": "0x2b639Cc84e1Ad3aA92D4Ee7d2755A6ABEf300D72",
+  "address": "0x59C4e2c6a6dC27c259D6d067a039c831e1ff4947",
   "network": {
     "name": "unknown",
     "chainId": 31337
@@ -46,7 +46,6 @@
       "name": "diamondCut",
       "constant": false,
       "payable": false,
-      "gas": 1099510627775,
       "inputs": [
         {
           "type": "tuple[]",
