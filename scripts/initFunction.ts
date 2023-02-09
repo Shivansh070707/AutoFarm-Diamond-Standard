@@ -28,63 +28,69 @@ export async function initializer() {
   let xrp: XRP = data.xrp;
   let ada: Cardano = data.ada;
   let pool: Liquidity = data.pool;
-  let farmA: Farm = await deployAutofarmDiamond(autoV2.address);
-  let farmB: Farm = await deployAutofarmDiamond(autoV21.address);
+  let farmA: Farm = await deployAutofarmDiamond(autoV2.address, 'farmA');
+  let farmB: Farm = await deployAutofarmDiamond(autoV21.address, 'farmB');
   let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c';
   const uniRouterAddress = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';
   const burnAddress = '0x000000000000000000000000000000000000dEaD';
-  const stratA: Strat = await deployStratDiamond([
+  const stratA: Strat = await deployStratDiamond(
     [
-      wbnbAddress,
-      owner.address,
-      farmA.diamondAddress,
-      autoV2.address,
-      want.address,
-      matic.address,
-      bitcoin.address,
-      autoV21.address,
-      farmB.diamondAddress,
-      uniRouterAddress,
-      reward.address,
-      burnAddress,
+      [
+        wbnbAddress,
+        owner.address,
+        farmA.diamondAddress,
+        autoV2.address,
+        want.address,
+        matic.address,
+        bitcoin.address,
+        autoV21.address,
+        farmB.diamondAddress,
+        uniRouterAddress,
+        reward.address,
+        burnAddress,
+      ],
+      0,
+      false,
+      false,
+      true,
+      [autoV21.address, bitcoin.address, autoV2.address],
+      [autoV21.address, matic.address],
+      [autoV21.address, bitcoin.address],
+      [matic.address, autoV21.address],
+      [bitcoin.address, autoV21.address],
+      [70, 150, 9990, 10000],
     ],
-    0,
-    false,
-    false,
-    true,
-    [autoV21.address, bitcoin.address, autoV2.address],
-    [autoV21.address, matic.address],
-    [autoV21.address, bitcoin.address],
-    [matic.address, autoV21.address],
-    [bitcoin.address, autoV21.address],
-    [70, 150, 9990, 10000],
-  ]);
-  let stratB: Strat = await deployStratDiamond([
+    'stratA'
+  );
+  let stratB: Strat = await deployStratDiamond(
     [
-      wbnbAddress,
-      owner.address,
-      farmB.diamondAddress,
-      xrp.address,
-      want.address,
-      matic.address,
-      bitcoin.address,
-      xrp.address,
-      farmA.diamondAddress,
-      uniRouterAddress,
-      reward.address,
-      burnAddress,
+      [
+        wbnbAddress,
+        owner.address,
+        farmB.diamondAddress,
+        xrp.address,
+        want.address,
+        matic.address,
+        bitcoin.address,
+        xrp.address,
+        farmA.diamondAddress,
+        uniRouterAddress,
+        reward.address,
+        burnAddress,
+      ],
+      0,
+      false,
+      false,
+      false,
+      [xrp.address, bitcoin.address, autoV21.address],
+      [xrp.address, matic.address],
+      [xrp.address, bitcoin.address],
+      [matic.address, xrp.address],
+      [bitcoin.address, xrp.address],
+      [70, 150, 9990, 10000],
     ],
-    0,
-    false,
-    false,
-    false,
-    [xrp.address, bitcoin.address, autoV21.address],
-    [xrp.address, matic.address],
-    [xrp.address, bitcoin.address],
-    [matic.address, xrp.address],
-    [bitcoin.address, xrp.address],
-    [70, 150, 9990, 10000],
-  ]);
+    'stratB'
+  );
   return {
     matic,
     bitcoin,

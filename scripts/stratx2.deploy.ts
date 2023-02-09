@@ -17,15 +17,18 @@ import {
   StratX2SetterFacet,
 } from '../typechain-types';
 import * as fs from 'fs';
+const CHAIN = process.env.CHAIN;
+const ENV = process.env.ENV;
 
-fs.mkdir('Build', (err) => {
-  console.log('File created');
-});
-// }
+export async function deployStratDiamond(args: any, name: string) {
+  if (!Boolean(CHAIN) || !Boolean(ENV)) {
+    console.log(
+      `First set the "CHAIN" and "ENV" variables in .env file at the root folder`
+    );
+    process.exit(1);
+  }
 
-export async function deployStratDiamond(args: any) {
   let diamondAddress: string;
-
   let diamondCutFacet: DiamondCutFacet;
   let diamondLoupeFacet: DiamondLoupeFacet;
 
@@ -52,11 +55,17 @@ export async function deployStratDiamond(args: any) {
     },
     abi: JSON.parse(String(diamondCutFacet.interface.format('json'))),
   };
-  fs.writeFileSync(
-    'Build/DiamondCutFacet.json',
-    JSON.stringify(diamondCutFacetData, null, 2)
-  );
 
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
+  fs.writeFileSync(
+    `./build/${CHAIN}/${ENV}/${name}/DiamondCutFacet.json`,
+    JSON.stringify(diamondCutFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
+  );
   console.log('DiamondCutFacet deployed at: ', diamondCutFacet.address);
 
   // deploy Diamond
@@ -76,9 +85,16 @@ export async function deployStratDiamond(args: any) {
     },
     abi: JSON.parse(String(diamond.interface.format('json'))),
   };
+
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/Diamond.json',
-    JSON.stringify(diamondFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/Diamond.json`,
+    JSON.stringify(diamondFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
 
   console.log('Diamond deployed at: ', diamond.address);
@@ -96,10 +112,18 @@ export async function deployStratDiamond(args: any) {
     },
     abi: JSON.parse(String(diamondInit.interface.format('json'))),
   };
+
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/DiamondInit.json',
-    JSON.stringify(diamondInitFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/DiamondInit.json`,
+    JSON.stringify(diamondInitFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
+
   console.log('DiamondInit deployed at: ', diamondInit.address);
   // deploy facets
   // console.log("Deploying facets");
@@ -154,32 +178,61 @@ export async function deployStratDiamond(args: any) {
   let DiamondLoupeFacetData = {
     fileData: fileData[0],
   };
+
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/DiamondLoupeFacet.json',
-    JSON.stringify(DiamondLoupeFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/DiamondLoupeFacet.json`,
+    JSON.stringify(DiamondLoupeFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
 
   let StratX2SetterData = {
     fileData: fileData[2],
   };
+
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/StratX2Setter.json',
-    JSON.stringify(StratX2SetterData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/StratX2Setter.json`,
+    JSON.stringify(StratX2SetterData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
+
   let StratX2FacetData = {
     fileData: fileData[3],
   };
+
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/StratX2Facet.json',
-    JSON.stringify(StratX2FacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/StratX2Facet.json`,
+    JSON.stringify(StratX2FacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
 
   let StratX2GetterData = {
     fileData: fileData[4],
   };
+
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/StratX2GetterFacet.json',
-    JSON.stringify(StratX2GetterData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/StratX2GetterFacet.json`,
+    JSON.stringify(StratX2GetterData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
 
   console.log('**** Diamond deploy end');

@@ -1,7 +1,6 @@
 import { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
 import 'solidity-coverage';
-
 import 'hardhat-contract-sizer';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -9,6 +8,11 @@ const { ALCHEMY_API_KEY, GOERLI_API_KEY } = process.env;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 const config: HardhatUserConfig = {
+  paths: {
+    artifacts: 'build/artifacts',
+    cache: 'build/cache',
+    sources: 'contracts',
+  },
   solidity: {
     compilers: [
       {

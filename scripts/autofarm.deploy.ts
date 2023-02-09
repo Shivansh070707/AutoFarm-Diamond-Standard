@@ -16,12 +16,17 @@ import {
   OwnershipFacet,
 } from '../typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+const CHAIN = process.env.CHAIN;
+const ENV = process.env.ENV;
 
-fs.mkdir('Build', (err) => {
-  console.log('File created');
-});
+export async function deployAutofarmDiamond(args: any, name: string) {
+  if (!Boolean(CHAIN) || !Boolean(ENV)) {
+    console.log(
+      `First set the "CHAIN" and "ENV" variables in .env file at the root folder`
+    );
+    process.exit(1);
+  }
 
-export async function deployAutofarmDiamond(args: any) {
   const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
   await network.provider.request({
     method: 'hardhat_impersonateAccount',
@@ -29,6 +34,7 @@ export async function deployAutofarmDiamond(args: any) {
   });
   const owner: SignerWithAddress = await ethers.getSigner(address);
   console.log('**** Deploying AutoFarm diamond ...');
+
   // deploy DiamondCutFacet
   const DiamondCutFacet = await ethers.getContractFactory('DiamondCutFacet');
   let diamondCutFacet: DiamondCutFacet = await DiamondCutFacet.deploy();
@@ -42,9 +48,15 @@ export async function deployAutofarmDiamond(args: any) {
     },
     abi: JSON.parse(String(diamondCutFacet.interface.format('json'))),
   };
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/DiamondCutFacet.json',
-    JSON.stringify(diamondCutFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/DiamondCutFacet.json`,
+    JSON.stringify(diamondCutFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
 
   console.log('DiamondCutFacet deployed at: ', diamondCutFacet.address);
@@ -67,9 +79,16 @@ export async function deployAutofarmDiamond(args: any) {
     },
     abi: JSON.parse(String(diamond.interface.format('json'))),
   };
+
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/Diamond.json',
-    JSON.stringify(diamondFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/Diamond.json`,
+    JSON.stringify(diamondFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
 
   console.log('Diamond deployed at: ', diamond.address);
@@ -87,10 +106,17 @@ export async function deployAutofarmDiamond(args: any) {
     },
     abi: JSON.parse(String(diamondInit.interface.format('json'))),
   };
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/DiamondInit.json',
-    JSON.stringify(diamondInitFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/DiamondInit.json`,
+    JSON.stringify(diamondInitFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
+
   console.log('DiamondInit deployed at: ', diamondInit.address);
   // deploy facets
   // console.log("Deploying facets");
@@ -147,24 +173,42 @@ export async function deployAutofarmDiamond(args: any) {
   let DiamondLoupeFacetData = {
     fileData: fileData[0],
   };
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/DiamondLoupeFacet.json',
-    JSON.stringify(DiamondLoupeFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/DiamondLoupeFacet.json`,
+    JSON.stringify(DiamondLoupeFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
-
   let AutoFarmFacetData = {
     fileData: fileData[2],
   };
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/AutoFarmFacet.json',
-    JSON.stringify(AutoFarmFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/AutoFarmFacet.json`,
+    JSON.stringify(AutoFarmFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
+
   let AutoFarmV2GetterFacetData = {
     fileData: fileData[3],
   };
+  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+    if (err) console.error(err);
+  });
   fs.writeFileSync(
-    'Build/AutoFarmV2GetterFacet.json',
-    JSON.stringify(AutoFarmV2GetterFacetData, null, 2)
+    `./build/${CHAIN}/${ENV}/${name}/AutoFarmV2GetterFacet.json`,
+    JSON.stringify(AutoFarmV2GetterFacetData, null, 2),
+    (err) => {
+      if (err) console.error(err);
+    }
   );
 
   console.log('**** Autofarm Diamond deploy end');
