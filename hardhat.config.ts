@@ -4,7 +4,7 @@ import 'solidity-coverage';
 import 'hardhat-contract-sizer';
 import * as dotenv from 'dotenv';
 dotenv.config();
-const { ALCHEMY_API_KEY, GOERLI_API_KEY } = process.env;
+const { ALCHEMY_API_KEY, GOERLI_API_KEY, PRIVATE_KEY } = process.env;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 const config: HardhatUserConfig = {
@@ -39,6 +39,11 @@ const config: HardhatUserConfig = {
     'truffle-dashboard': {
       url: 'http://localhost:24012/rpc',
     },
+    goerli: {
+      url: `https://eth-goerli.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+      accounts: [`0x${PRIVATE_KEY}`],
+      chainId: 5,
+    },
   },
   etherscan: {
     apiKey: GOERLI_API_KEY,
@@ -47,9 +52,9 @@ const config: HardhatUserConfig = {
   contractSizer: {
     alphaSort: true,
     disambiguatePaths: false,
-    runOnCompile: true,
+    runOnCompile: false,
     strict: true,
-    only: [],
+    only: ['diamond/'],
   },
 };
 export default config;
