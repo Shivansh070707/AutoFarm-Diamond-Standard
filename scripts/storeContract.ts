@@ -33,15 +33,19 @@ export async function storeContract(
     network,
     abi,
   };
-  fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
-    if (err) console.error('Error', err);
-  });
+  if (ENV != 'localhost') {
+    fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
+      if (err) console.error('Error', err);
+    });
+  }
 
   try {
-    fs.writeFileSync(
-      `./build/${CHAIN}/${ENV}/${name}/${filename}.json`,
-      JSON.stringify(output, null, 2)
-    );
+    if (ENV != 'localhost') {
+      fs.writeFileSync(
+        `./build/${CHAIN}/${ENV}/${name}/${filename}.json`,
+        JSON.stringify(output, null, 2)
+      );
+    }
   } catch (error) {
     console.log(error);
   }

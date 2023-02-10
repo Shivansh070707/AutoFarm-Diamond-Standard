@@ -11,7 +11,6 @@ import {
   DiamondCutFacet,
   DiamondInit,
   DiamondLoupeFacet,
-  IERC20,
   OwnershipFacet,
   StratX2Facet,
   StratX2GetterFacet,
