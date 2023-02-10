@@ -20,13 +20,13 @@
 
 ```shell
 .
-├── build                 # deployed addresses and the ABI of the smart contract (scripts/deploy.js)
+├── build                 # deployed addresses and the ABI of the smart contract (scripts/deploy.ts)
 ├── contracts            # smart contracts solidity files
-├── scripts               # deployment scripts (deploy.js) and other tasks
+├── scripts               # deployment scripts (deploy.ts) and other tasks
 ├── test                  # test scripts
 ├── .env.example          # environment variables template
 ├── .gitignore
-├── hardhat-config.js     # hardhat configuration
+├── hardhat-config.ts     # hardhat configuration
 ├── package.json          # project details and dependencies
 ├── README.md
 
@@ -112,15 +112,47 @@
   npx hardhat run .\scripts\autofarm.deploy --network <NETWORK>  param1 param2
   ```
 
+  //param1 is autov2 address - example - <'0x20F5f006a0184883068bBF58fb0c526A8EEa8BFD'>
+  // param2 is farm name - example -<'AutoFarm Name>
+
   ```shell
   npx hardhat run .\scripts\stratx2.deploy --network <NETWORK> param1 param2
   ```
 
+  // param1 is the constructor arguments of stratx2
+  example- [
+  [
+  wbnbAddress,
+  owner.address,
+  farmA.diamondAddress,
+  autoV2.address,
+  want.address,
+  matic.address,
+  bitcoin.address,
+  autoV21.address,
+  farmB.diamondAddress,
+  uniRouterAddress,
+  reward.address,
+  burnAddress,
+  ],
+  0,
+  false,
+  false,
+  true,
+  [autoV21.address, bitcoin.address, autoV2.address],
+  [autoV21.address, matic.address],
+  [autoV21.address, bitcoin.address],
+  [matic.address, autoV21.address],
+  [bitcoin.address, autoV21.address],
+  [70, 150, 9990, 10000],
+  ],
+  & param2 is strat name -example <'stratA'>
+
   ```shell
-  npx hardhat run .\scripts\initFunction --network <NETWORK> param
+  npx hardhat run .\scripts\initFunction --network <NETWORK>
   ```
 
-  `<NETWORK>` can be `localhost`, `goerli`, `plsTest`, `plsMain`, `mainnet` or any other network that is supported and defined in the `hardhat.config.js`.
+  `<NETWORK>` can be `localhost`, `goerli`, `plsTest`, `plsMain`, `mainnet` or any other network that is supported and defined in the `hardhat.config.ts`.
 
 - If the deployment uses the truffle dashboard method, then, switch to the browser and sign the deployment transactions from the MetaMask extension. For the deployment of the `initFunction.ts`, there will be **multiple transactions** that need to be signed via Metamask.
 
@@ -138,7 +170,8 @@
   npx hardhat size-contracts
   ```
 
-  ![size](./smart-contract-size.png)
+  ![size](./smart-contract-size-1.png)
+  ![size](./smart-contract-size-2.png)
 
 ## Code coverage
 
