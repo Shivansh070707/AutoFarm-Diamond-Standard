@@ -124,20 +124,21 @@ npm install or yarn install
 
     - Deploy the autofarm project smart contracts using either of the two ways mentioned above.
 
-     ```shell
+       ```shell
        npx hardhat run .\scripts\autofarm.deploy.ts --network <NETWORK>  param1 param2
+       ```
 
-     ```
-       * param1 is autov2 address \
+    - param1 is autov2 address \
         example:<'0x20F5f006a0184883068bBF58fb0c526A8EEa8BFD'>
-       * param2 is farm name \
+    - param2 is farm name \
         example: -<'AutoFarm Name>
 
     ####  Deploy StratX2
      - for deploying stratx2 diamond you need to modify the variables in './scripts/stratx2.pcs.ts'
      ```shell
       npx hardhat run .\scripts\stratx2.pcs.ts --network <NETWORK>
-  ```
+     ```
+  
 
 - `<NETWORK>` can be `localhost`, `goerli`, `plsTest`, `plsMain`, `mainnet` or any other network that is supported and defined in the `hardhat.config.ts`.
 
