@@ -38,6 +38,7 @@
 ├── README.md
 
 ```
+---
 
 ## Instructions and hardhat commands
 
@@ -149,7 +150,7 @@ npm install or yarn install
 - Otherwise, if the deployment uses the private key, the transactions will be signed automatically and will be shown in the terminal.
 
 - After the succesful deployment of the smart contracts, a `build` folder comprising the addresses and the ABIs of the deployed smart contracts will be generated.
-
+---
 ## Smart contracts size
 
 - To generate the sizes of the smart contracts.
@@ -159,7 +160,7 @@ npm install or yarn install
   ```
 
   ![size](./smart-contract-size.png)
-
+---
 ## Code coverage
 
 - To generate the code coverage report for the test cases of the smart contracts.
@@ -170,7 +171,7 @@ npm install or yarn install
 
   ![coverage](./code-coverage.png)
   
-
+---
 ## Facet Information
 
 - The contracts/diamond/Diamond.sol file shows an example of implementing a diamond.
@@ -190,8 +191,8 @@ npm install or yarn install
 - The test/autofarm.test.ts file gives tests for the autofarm facets.
 
 - The test/stratx2.test.ts file gives tests for the stratx2 facets.
-
-### How to Get Started Making Your Diamond
+---
+## How to Get Started Making Your Diamond
 1- Reading and understand [EIP-2535 Diamonds](https://github.com/ethereum/EIPs/issues/2535). If something is unclear let me know!
 
 2- Use a diamond reference implementation. You are at the right place because this is the README for a diamond reference implementation.
@@ -215,7 +216,7 @@ let myUsefulFacet = await ethers.getContract(facetName,diamondDeployedAddress) a
 ```javascript
 string result = MyUsefulFacet(address(diamondContract)).getResult()
 ```
-
+---
 ### Useful Links
 1.[Introduction to the Diamond Standard, EIP-2535 Diamonds](https://eip2535diamonds.substack.com/p/introduction-to-the-diamond-standard) \
 2.[EIP-2535 Diamonds](https://github.com/ethereum/EIPs/issues/2535) \
@@ -225,9 +226,10 @@ string result = MyUsefulFacet(address(diamondContract)).getResult()
 6.[Upgradeable smart contracts using the Diamond Standard](https://hiddentao.com/archives/2020/05/28/upgradeable-smart-contracts-using-diamond-standard) \
 7.[buidler-deploy supports diamonds](https://github.com/wighawag/buidler-deploy/)
 
-
+---
 ## Author
 Shivansh Shrivastava
 
+---
 ### License
 MIT license. See the license file. Anyone can use or modify this software for their purposes.
