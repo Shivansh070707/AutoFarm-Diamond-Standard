@@ -4,7 +4,6 @@ import { initializer } from '../scripts/initFunction';
 import {
   AUTOv2,
   AutoFarmFacet,
-  AutoFarmV2GetterFacet,
   ERC20,
   Ownable,
   StratX2Facet,
@@ -24,7 +23,6 @@ describe('Test', () => {
   let stratX2Setter: StratX2SetterFacet;
   let stratX2Getter: StratX2GetterFacet;
   let autoFarmFacet: AutoFarmFacet;
-  let autoFarmGetter: AutoFarmV2GetterFacet;
   let farmA: Farm;
   let farmB: Farm;
   let owner: SignerWithAddress;
@@ -367,9 +365,11 @@ describe('Test', () => {
   });
   describe('Errors', () => {
     it('Should throw error when caller is not gov ', async () => {
-      await expect(stratX2Setter.setGov(owner.address)).to.be.revertedWith(
-        '!gov'
-      );
+      let signer: SignerWithAddress[] = await ethers.getSigners();
+      let user1: SignerWithAddress = signer[5];
+      await expect(
+        stratX2Setter.connect(user1).setGov(owner.address)
+      ).to.be.revertedWith('!gov');
     });
     it('should revert if entranceFeeFactor too low', async () => {
       await expect(

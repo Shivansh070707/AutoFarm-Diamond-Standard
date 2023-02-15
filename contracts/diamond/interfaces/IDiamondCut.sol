@@ -19,6 +19,7 @@ interface IDiamondCut {
         FacetCutAction action;
         bytes4[] functionSelectors;
     }
+    event DiamondCut(FacetCut[] _diamondCut, address _init, bytes _calldata);
 
     /// @notice Add/replace/remove any number of functions and optionally execute
     ///         a function with delegatecall
@@ -31,6 +32,4 @@ interface IDiamondCut {
         address _init,
         bytes calldata _calldata
     ) external;
-
-    event DiamondCut(FacetCut[] _diamondCut, address _init, bytes _calldata);
 }

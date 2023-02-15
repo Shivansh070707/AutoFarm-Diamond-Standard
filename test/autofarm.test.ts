@@ -222,11 +222,12 @@ describe('Test', () => {
       ).to.be.rejectedWith('!safe');
     });
     it('will revert if caller is not owner', async () => {
+      let signer: SignerWithAddress[] = await ethers.getSigners();
+      let user1: SignerWithAddress = signer[5];
       await expect(
-        autoFarmFacet.inCaseTokensGetStuck(
-          autoV2.address,
-          ethers.utils.parseEther('1')
-        )
+        autoFarmFacet
+          .connect(user1)
+          .inCaseTokensGetStuck(autoV2.address, ethers.utils.parseEther('1'))
       ).to.be.rejectedWith('Not Owner');
     });
   });

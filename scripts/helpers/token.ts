@@ -24,15 +24,7 @@ export async function main() {
   let autoV21: AUTOv2;
   let reward: SignerWithAddress;
 
-  const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
-  await network.provider.request({
-    method: 'hardhat_impersonateAccount',
-    params: [address],
-  });
-
-  owner = await ethers.getSigner(address);
-
-  [reward, otherAccount] = await ethers.getSigners();
+  [owner, reward, otherAccount] = await ethers.getSigners();
 
   //Deploying Tokens
   const MATIC = await ethers.getContractFactory('Matic');

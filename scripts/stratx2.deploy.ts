@@ -1,210 +1,83 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
-import { ethers, network } from 'hardhat';
-import { getSelectorsFromContract, FacetCutAction } from './libraries';
-import { storeContract } from './storeContract';
-import {
-  Diamond,
-  DiamondCutFacet,
-  DiamondInit,
-  DiamondLoupeFacet,
-  OwnershipFacet,
-  StratX2Facet,
-  StratX2GetterFacet,
-  StratX2SetterFacet,
-} from '../typechain-types';
+import { deployStratDiamond } from './stratx2';
+import { ethers } from 'hardhat';
 
-export async function deployStratDiamond(args: any, name: string) {
-  let diamondAddress: string;
-  let diamondCutFacet: DiamondCutFacet;
-  let diamondLoupeFacet: DiamondLoupeFacet;
+//Replace the parameters with required args
+let wbnbAddress: string = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c';
+let govAddress: string = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+let autoFarmAddress: string = '0x631e7d43d1718b7E01b570ef6DbaB34d9049Acf2';
+let AUTOAddress: string = '0x8Fde1BeCfaf972Ee02F28cA3bb58ff3bF27521c1';
+let wantAddress: string = '0xaD7ddB448159e715A6C1168617705458AdABe4cf';
+let token0Address: string = '0x1F5D876bf2fED760b13fd5F91e47a65E026DE977';
+let token1Address: string = '0xDbA8DeFa731D0F95f3515D2E26B6d3C2d38705F2';
+let earnedAddress: string = '0x8Fde1BeCfaf972Ee02F28cA3bb58ff3bF27521c1';
+let farmContractAddress: string = '0x841e5a4E3c8748EFdAae4eb5B96E80B3012AF26e';
+let pid: Number = 1;
+let isCAKEStaking: Boolean = false;
+let isSameAssetDeposit: Boolean = true;
+let isAutoComp: Boolean = true;
+let uniRouterAddress: string = '0xbc367b25f6f512AF177Be166392370ff32284068';
+let earnedToAUTOPath: string[] = ['0xbc367b25f6f512AF177Be166392370ff32284068'];
+let earnedToToken0Path: string[] = [
+  '0xbc367b25f6f512AF177Be166392370ff32284068',
+];
+let earnedToToken1Path: string[] = [
+  '0xbc367b25f6f512AF177Be166392370ff32284068',
+];
+let token0ToEarnedPath: string[] = [
+  '0xbc367b25f6f512AF177Be166392370ff32284068',
+];
+let token1ToEarnedPath: string[] = [
+  '0xbc367b25f6f512AF177Be166392370ff32284068',
+];
+let controllerFee: Number = 1;
+let rewardsAddress: string = '0xbc367b25f6f512AF177Be166392370ff32284068';
+let buyBackRate: Number = 1;
+let buyBackAddress: string = '0x841e5a4e3c8748efdaae4eb5b96e80b3012af26e';
+let entranceFeeFactor: Number = 1;
+let withdrawFeeFactor: Number = 1;
+let strat_name: string = 'StratA';
 
-  let OwnershipFacet: OwnershipFacet;
-  const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
-  await network.provider.request({
-    method: 'hardhat_impersonateAccount',
-    params: [address],
-  });
-  const owner = await ethers.getSigner(address);
+async function main() {
+  let [Owner] = await ethers.getSigners();
+  let owner: string = Owner.address;
+  /*
+    -Replace line no 42{ Owner.address } by the address of which contract are deploying .
+    -Owner address must be equal to the address of which contracts are deploying.
+    -Comment line 41 by typing '//' at the beginning of line 9
+    -Address will be in string "<Owner address>"
 
-  console.log('**** Deploying Strat diamond ...');
-
-  // deploy DiamondCutFacet
-  const DiamondCutFacet = await ethers.getContractFactory('DiamondCutFacet');
-  diamondCutFacet = await DiamondCutFacet.deploy();
-  await diamondCutFacet.deployed();
-
-  await storeContract(
-    diamondCutFacet.address,
-    JSON.parse(String(diamondCutFacet.interface.format('json'))),
-    name,
-    'DiamondCutFacet'
-  );
-
-  console.log('DiamondCutFacet deployed at: ', diamondCutFacet.address);
-
-  // deploy Diamond
-  const Diamond = await ethers.getContractFactory('Diamond');
-  const diamond: Diamond = await Diamond.deploy(
-    owner.address,
-    diamondCutFacet.address
-  );
-  await diamond.deployed();
-  diamondAddress = diamond.address;
-
-  await storeContract(
-    diamond.address,
-    JSON.parse(String(diamond.interface.format('json'))),
-    name,
-    'Diamond'
-  );
-
-  console.log('Diamond deployed at: ', diamond.address);
-
-  // deploy DiamondInit
-  const DiamondInit = await ethers.getContractFactory('DiamondInit');
-  const diamondInit: DiamondInit = await DiamondInit.deploy();
-  await diamondInit.deployed();
-
-  await storeContract(
-    diamondInit.address,
-    JSON.parse(String(diamondInit.interface.format('json'))),
-    name,
-    'DiamondInit'
-  );
-
-  console.log('DiamondInit deployed at: ', diamondInit.address);
-  // deploy facets
-  // console.log("Deploying facets");
-  const FacetNames = [
-    'DiamondLoupeFacet',
-    'OwnershipFacet',
-    'StratX2SetterFacet',
-    'StratX2Facet',
-    'StratX2GetterFacet',
+  */
+  let param = [
+    [
+      wbnbAddress,
+      govAddress,
+      autoFarmAddress,
+      AUTOAddress,
+      wantAddress,
+      token0Address,
+      token1Address,
+      earnedAddress,
+      farmContractAddress,
+      uniRouterAddress,
+      rewardsAddress,
+      buyBackAddress,
+    ],
+    pid,
+    isCAKEStaking,
+    isSameAssetDeposit,
+    isAutoComp,
+    earnedToAUTOPath,
+    earnedToToken0Path,
+    earnedToToken1Path,
+    token0ToEarnedPath,
+    token1ToEarnedPath,
+    [controllerFee, buyBackRate, entranceFeeFactor, withdrawFeeFactor],
   ];
-  const cut = [];
-  let fileData = [];
-  for (const facetName of FacetNames) {
-    const Facet = await ethers.getContractFactory(facetName);
-    const facet = await Facet.deploy();
-    await facet.deployed();
-    fileData.push({
-      address: facet.address,
-      abi: JSON.parse(String(facet.interface.format('json'))),
-    });
-
-    console.log(`${facetName} deployed at ${facet.address}`);
-
-    const selectors = getSelectorsFromContract(facet);
-    cut.push({
-      facetAddress: facet.address,
-      action: FacetCutAction.Add,
-      functionSelectors: selectors.getSelectors(),
-    });
-  }
-
-  //console.log('Diamond Cut: ', cut);
-  const diamondCut = await ethers.getContractAt('IDiamondCut', diamond.address);
-  const diamondInitFunctionCall = diamondInit.interface.encodeFunctionData(
-    'stratx2Init',
-    args
-  );
-
-  const tx = await diamondCut
-    .connect(owner)
-    .diamondCut(cut, diamondInit.address, diamondInitFunctionCall);
-
-  // console.log("Diamond cut tx: ", tx.hash);
-  const receipt = await tx.wait();
-  // console.log("returned status: ", receipt);
-  if (!receipt.status) throw Error(`Diamond upgrade failed: ${tx.hash}`);
-
-  let DiamondLoupeFacetData = {
-    fileData: fileData[0],
-  };
-  await storeContract(
-    DiamondLoupeFacetData.fileData.address,
-    DiamondLoupeFacetData.fileData.abi,
-    name,
-    'DiamondLoupeFacet'
-  );
-  let OwnershipFacetData = {
-    fileData: fileData[1],
-  };
-  await storeContract(
-    OwnershipFacetData.fileData.address,
-    OwnershipFacetData.fileData.abi,
-    name,
-    'OwnershipFacet'
-  );
-
-  let StratX2SetterData = {
-    fileData: fileData[2],
-  };
-  await storeContract(
-    StratX2SetterData.fileData.address,
-    StratX2SetterData.fileData.abi,
-    name,
-    'StratX2Setter'
-  );
-
-  let StratX2FacetData = {
-    fileData: fileData[3],
-  };
-  await storeContract(
-    StratX2FacetData.fileData.address,
-    StratX2FacetData.fileData.abi,
-    name,
-    'StratX2Facet'
-  );
-
-  let StratX2GetterData = {
-    fileData: fileData[4],
-  };
-  await storeContract(
-    StratX2GetterData.fileData.address,
-    StratX2GetterData.fileData.abi,
-    name,
-    'StratX2GetterFacet'
-  );
-
-  console.log('**** Diamond deploy end');
-
-  diamondCutFacet = await ethers.getContractAt(
-    'DiamondCutFacet',
-    diamondAddress
-  );
-
-  diamondLoupeFacet = await ethers.getContractAt(
-    'DiamondLoupeFacet',
-    diamondAddress
-  );
-  OwnershipFacet = await ethers.getContractAt('OwnershipFacet', diamondAddress);
-
-  let stratX2Facet: StratX2Facet = await ethers.getContractAt(
-    'StratX2Facet',
-    diamondAddress
-  );
-  let stratX2Setter: StratX2SetterFacet = await ethers.getContractAt(
-    'StratX2SetterFacet',
-    diamondAddress
-  );
-  let stratX2Getter: StratX2GetterFacet = await ethers.getContractAt(
-    'StratX2GetterFacet',
-    diamondAddress
-  );
-  return {
-    diamondAddress,
-    diamondInit,
-    stratX2Getter,
-    stratX2Facet,
-    stratX2Setter,
-    diamondCutFacet,
-    diamondLoupeFacet,
-    OwnershipFacet,
-  };
+  await deployStratDiamond(param, strat_name, owner);
 }
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

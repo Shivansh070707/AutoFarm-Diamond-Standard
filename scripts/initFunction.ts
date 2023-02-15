@@ -10,8 +10,8 @@ import {
   Ownable,
   XRP,
 } from '../typechain-types';
-import { deployAutofarmDiamond } from './autofarm.deploy';
-import { deployStratDiamond } from './stratx2.deploy';
+import { deployAutofarmDiamond } from './autofarm';
+import { deployStratDiamond } from './stratx2';
 import { Farm } from './interfaces/farm';
 import { Strat } from './interfaces/strat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
@@ -28,8 +28,16 @@ export async function initializer() {
   let xrp: XRP = data.xrp;
   let ada: Cardano = data.ada;
   let pool: Liquidity = data.pool;
-  let farmA: Farm = await deployAutofarmDiamond(autoV2.address, 'farmA');
-  let farmB: Farm = await deployAutofarmDiamond(autoV21.address, 'farmB');
+  let farmA: Farm = await deployAutofarmDiamond(
+    autoV2.address,
+    'farmA',
+    owner.address
+  );
+  let farmB: Farm = await deployAutofarmDiamond(
+    autoV21.address,
+    'farmB',
+    owner.address
+  );
   let wbnbAddress = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c';
   const uniRouterAddress = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';
   const burnAddress = '0x000000000000000000000000000000000000dEaD';
@@ -60,7 +68,8 @@ export async function initializer() {
       [bitcoin.address, autoV21.address],
       [70, 150, 9990, 10000],
     ],
-    'stratA'
+    'stratA',
+    owner.address
   );
   let stratB: Strat = await deployStratDiamond(
     [
@@ -89,7 +98,8 @@ export async function initializer() {
       [bitcoin.address, xrp.address],
       [70, 150, 9990, 10000],
     ],
-    'stratB'
+    'stratB',
+    owner.address
   );
   return {
     matic,
