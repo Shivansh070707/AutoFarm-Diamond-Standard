@@ -18,7 +18,7 @@ import { Farm } from '../scripts/interfaces/farm';
 import { Strat } from '../scripts/interfaces/strat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
-describe('Test', () => {
+describe('Tests for Diamond ', () => {
   let diamondCutFacet: DiamondCutFacet;
   let diamondLoupeFacet: DiamondLoupeFacet;
   let diamondInit: DiamondInit;
@@ -45,7 +45,7 @@ describe('Test', () => {
     owner = data.owner;
   });
 
-  describe('test - diamond', () => {
+  describe('DiamondLoupeFacet Tests', () => {
     describe('farmA', () => {
       it('should have 5 facets -- call to facetAddresses', async () => {
         facetAddresses = await farmA.diamondLoupeFacet.facetAddresses();
@@ -262,7 +262,7 @@ describe('Test', () => {
         });
       });
     });
-    describe('upgrade', () => {
+    describe('DiamondCutFacet Tests (upgrading facets and functions)', () => {
       it('will remove facet in autofarm diamond', async () => {
         autoFarmGetter = farmA.autoFarmV2GetterFacet;
         const cut = [
@@ -376,7 +376,7 @@ describe('Test', () => {
         expect(await autoFarmGetter.autoV2()).to.equal(data.autoV2.address);
       });
     });
-    describe('Negative test cases', async () => {
+    describe('Negative test cases - Diamond', async () => {
       it('will throw error when same functions added twice', async () => {
         let cut = [
           {

@@ -16,6 +16,17 @@ contract AutoFarmV2GetterFacet {
         return a.autoV2;
     }
 
+    function iswantAdded(address want) external view returns (bool) {
+        LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        return a.iswantAdded[want];
+    }
+
+    function wantToPid(address want) external view returns (uint256) {
+        LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        require(a.iswantAdded[want], "pid not found");
+        return a.wantToPid[want];
+    }
+
     function burnAddress() external view returns (address) {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
         return a.burnAddress;

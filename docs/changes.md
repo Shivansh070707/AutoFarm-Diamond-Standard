@@ -64,6 +64,34 @@ however in some cases we improvised the logic . below are the changes in the con
 
   In original implementation ,additional 12% (ownerAUTOReward) of AUTOReward are minted whereas in modified implementation 12% tokens are minted to owner and remaining 88% of autoReward are minted to autofarm contract address.
 
+3- changes in add function :
+
+```solidity
+  require(!a.iswantAdded[_want], "want added already!");
+      a.iswantAdded[_want] = true;
+      a.wantToPid[_want] = a.poolInfo.length;
+```
+
+- original Contracts don't have ability to check if same want pools are added or not. To solve this problem we have two mappings :-
+
+  ```solidity
+    mapping(address => uint256) wantToPid;
+    mapping(address => bool) iswantAdded;
+
+  ```
+
+  wanttoPid returns the poolId or pid of a given want address .\
+  iswantAdded returns bool value whether want address is added in pid or not .
+
+  - To interact with these two mappings we have two functions :
+
+  ```solidity
+  function iswantAdded(address want) external view returns (bool)
+  function wantToPid(address want) external view returns (uint256)
+  ```
+
+  wantToPid will revert if user has given address which is not added in pool .
+
 ---
 
 ## Code changes from original stratx2 contract
