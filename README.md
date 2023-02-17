@@ -50,8 +50,9 @@
 git clone https://github.com/Shivansh070707/AutoFarm-Diamond-Standard
 ```
 
-2- Install the autofarm project dependencies. \
- This will install the packages mentioned inside the `package.json` file.:
+2- Install the autofarm project dependencies.
+
+This will install the packages mentioned inside the `package.json` file.:
 
 ```shell
 cd AutoFarm-Diamond-Standard
@@ -89,7 +90,7 @@ npm install or yarn install
 
 - Test Single files with typecheck:
 
-  ```shell
+  ```shell m
   npx hardhat test ./test/autofarm.test.ts --network localhost --typecheck
   ```
 
@@ -108,10 +109,12 @@ npm install or yarn install
   npx hardhat coverage
   ```
 
-- Deployment of the smart contracts. \
+- Deployment of the smart contracts.
+
   There are two ways of deploying the smart contracts:
 
-  - Using private keys: \
+  - Using private keys:
+
     The private key needs to be pasted in the .env file and the `accounts` property in the `networks` properties in the `hardhat.config.ts` file needs to be uncommented for the network on which the smart contracts need to deployed, as follows.
 
     ```shell
@@ -122,7 +125,8 @@ npm install or yarn install
     },
     ```
 
-  - Without using private keys: \
+  - Without using private keys:
+
     This lets you deploy the contracts without the need of pasting the private key anywhere in the project and is the preferred way of deployment.
 
     - Install truffle globally
@@ -141,21 +145,21 @@ npm install or yarn install
 
 #### Deploy Autofarm
 
-- for deploying autofarm diamond you need to modify the variables in './scripts/autofarm.deploy.ts'
+- for deploying autofarm diamond you need to modify the variables in `./scripts/autofarm.deploy.ts`
 
-```shell
-  npx hardhat run .\scripts\autofarm.deploy.ts --network <NETWORK>
-```
+  ```shell
+    npx hardhat run .\scripts\autofarm.deploy.ts --network <NETWORK>
+  ```
 
 #### Deploy StratX2
 
-- for deploying stratx2 diamond you need to modify the variables in './scripts/stratx2.deploy.ts'
+- for deploying stratx2 diamond you need to modify the variables in `./scripts/stratx2.deploy.ts`
 
   ```shell
    npx hardhat run .\scripts\stratx2.deploy.ts --network <NETWORK>
   ```
 
-- `<NETWORK>` can be `localhost`, `goerli`, `plsTest`, `plsMain`, `mainnet` or any other network that is supported and defined in the `hardhat.config.ts`.
+- `<NETWORK>` can be `localhost`, `goerli`, `mainnet` or any other network that is supported and defined in the `hardhat.config.ts`.
 
 - If the deployment uses the truffle dashboard method, then, switch to the browser and sign the deployment transactions from the MetaMask extension. For the deployment of the `initFunction.ts`, there will be **multiple transactions** that need to be signed via Metamask.
 
@@ -202,7 +206,9 @@ npm install or yarn install
 - The scripts/autofarm.deploy.ts file shows how to deploy a Autofarm diamond.
 
 - The scripts/stratx2.ts & scripts/stratx2.pcs.ts file shows how to deploy a strat diamond.
+
 - The test/facet.test.ts file gives tests for the diamondCut function and the Diamond Loupe functions.
+
 - The test/autofarm.test.ts file gives tests for the autofarm facets.
 
 - The test/stratx2.test.ts file gives tests for the stratx2 facets.
@@ -211,17 +217,17 @@ npm install or yarn install
 
 ## How to Get Started Making Your Diamond
 
-1- Reading and understand [EIP-2535 Diamonds](https://github.com/ethereum/EIPs/issues/2535). If something is unclear let me know!
+1- Reading and understand [EIP-2535 Diamonds](https://github.com/ethereum/EIPs/issues/2535).
 
 2- Use a diamond reference implementation. You are at the right place because this is the README for a diamond reference implementation.
 
-This diamond implementation is boilerplate code that makes a diamond compliant with EIP-2535 Diamonds.
+- This diamond implementation is boilerplate code that makes a diamond compliant with EIP-2535 Diamonds.
 
-Specifically you can copy and use the [DiamondCutFacet.sol](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/499675a256f7fe984987f423bd5e6c50841e5446/contracts/diamond/facets/DiamondCutFacet.sol) and [DiamondLoupeFacet.sol contracts](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/499675a256f7fe984987f423bd5e6c50841e5446/contracts/diamond/facets/DiamondLoupeFacet.sol). They implement the diamondCut function and the loupe functions.
+- Specifically you can copy and use the [DiamondCutFacet.sol](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/499675a256f7fe984987f423bd5e6c50841e5446/contracts/diamond/facets/DiamondCutFacet.sol) and [DiamondLoupeFacet.sol contracts](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/499675a256f7fe984987f423bd5e6c50841e5446/contracts/diamond/facets/DiamondLoupeFacet.sol). They implement the diamondCut function and the loupe functions.
 
-The [Diamond.sol](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/499675a256f7fe984987f423bd5e6c50841e5446/contracts/diamond/Diamond.sol) contract could be used as is, or it could be used as a starting point and customized. This contract is the diamond. Its deployment creates a diamond. It's address is a stable diamond address that does not change.
+- The [Diamond.sol](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/499675a256f7fe984987f423bd5e6c50841e5446/contracts/diamond/Diamond.sol) contract could be used as is, or it could be used as a starting point and customized. This contract is the diamond. Its deployment creates a diamond. It's address is a stable diamond address that does not change.
 
-The [LibDiamond.sol](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/499675a256f7fe984987f423bd5e6c50841e5446/contracts/diamond/libraries/LibDiamond.sol) library could be used as is. It shows how to implement Diamond Storage. This contract includes contract ownership which you might want to change if you want to implement DAO-based ownership or other form of contract ownership. Go for it. Diamonds can work with any kind of contract ownership strategy. This library contains an internal function version of diamondCut that can be used in the constructor of a diamond or other places.
+- The [LibDiamond.sol](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/499675a256f7fe984987f423bd5e6c50841e5446/contracts/diamond/libraries/LibDiamond.sol) library could be used as is. It shows how to implement Diamond Storage. This contract includes contract ownership which you might want to change if you want to implement DAO-based ownership or other form of contract ownership. Go for it. Diamonds can work with any kind of contract ownership strategy. This library contains an internal function version of diamondCut that can be used in the constructor of a diamond or other places.
 
 ### Calling Diamond Functions
 
@@ -230,7 +236,10 @@ In order to call a function that exists in a diamond you need to use the ABI inf
 Here is an example that uses ethers.js:
 
 ```javascript
-let myUsefulFacet = await ethers.getContract(facetName,diamondDeployedAddress) as facetNameType;
+let myUsefulFacet = await ethers.getContractAt(
+  facetName,
+  diamondDeployedAddress
+);
 ```
 
 ```javascript
@@ -247,7 +256,7 @@ string result = MyUsefulFacet(address(diamondContract)).getResult()
 4.[Solidity Storage Layout For Proxy Contracts and Diamonds](https://medium.com/1milliondevs/solidity-storage-layout-for-proxy-contracts-and-diamonds-c4f009b6903) \
 5.[New Storage Layout For Proxy Contracts and Diamonds](https://medium.com/1milliondevs/new-storage-layout-for-proxy-contracts-and-diamonds-98d01d0eadb) \
 6.[Upgradeable smart contracts using the Diamond Standard](https://hiddentao.com/archives/2020/05/28/upgradeable-smart-contracts-using-diamond-standard) \
-7.[buidler-deploy supports diamonds](https://github.com/wighawag/buidler-deploy/)
+7.[buidler-deploy supports diamonds](https://github.com/wighawag/buidler-deploy/) 8.[Introduction to AutoFarm](https://medium.com/stakingbits/introduction-to-autofarm-on-the-binance-smart-chain-bc285203710c)
 
 ---
 

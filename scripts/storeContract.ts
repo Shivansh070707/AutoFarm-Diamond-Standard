@@ -14,6 +14,12 @@ export async function storeContract(
       `First set the "CHAIN" and "ENV" variables in .env file at the root folder`
     );
     process.exit(1);
+  } else {
+    try {
+      fs.mkdirSync(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true });
+    } catch (e) {
+      console.log('Unable to make file', e);
+    }
   }
   // ----------------- MODIFIED FOR SAVING DEPLOYMENT DATA ----------------- //
 
@@ -33,11 +39,6 @@ export async function storeContract(
     network,
     abi,
   };
-  if (ENV != 'localhost') {
-    fs.mkdir(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true }, (err) => {
-      if (err) console.error('Error', err);
-    });
-  }
 
   try {
     if (ENV != 'localhost') {
