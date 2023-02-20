@@ -148,7 +148,7 @@ npm install or yarn install
 - for deploying autofarm diamond you need to modify the variables in `./scripts/autofarm.deploy.ts`
 
   ```shell
-    npx hardhat run .\scripts\autofarm.deploy.ts --network <NETWORK>
+    npx hardhat run ./scripts/autofarm.deploy.ts --network <NETWORK>
   ```
 
 #### Deploy StratX2
@@ -156,7 +156,7 @@ npm install or yarn install
 - for deploying stratx2 diamond you need to modify the variables in `./scripts/stratx2.deploy.ts`
 
   ```shell
-   npx hardhat run .\scripts\stratx2.deploy.ts --network <NETWORK>
+   npx hardhat run ./scripts/stratx2.deploy.ts --network <NETWORK>
   ```
 
 - `<NETWORK>` can be `localhost`, `goerli`, `mainnet` or any other network that is supported and defined in the `hardhat.config.ts`.

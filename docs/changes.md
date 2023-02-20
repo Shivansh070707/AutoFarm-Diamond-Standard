@@ -1,7 +1,7 @@
 # Code Improvisations
 
 The Autofarm-Diamond is implementation of autofarm and strat contracts in diamond standard.
-though whole implementation is different from original contracts but logic throughout the contracts are same,
+though whole implementation of state variables is different from original contracts but logic throughout the contracts are same,
 however in some cases we improvised the logic . below are the changes in the contracts .
 
 ## Code changes from original autofarm contract
