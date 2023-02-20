@@ -6,9 +6,9 @@ however in some cases we improvised the logic . below are the changes in the con
 
 ## Code changes from original autofarm contract
 
-1- Changes in withdrawAll() function:
+1- Changes in `withdrawAll()` function:
 
-- Original Function Implementation:
+- original function implementation:
 
   ```solidity
   function withdrawAll(uint256 _pid) public nonReentrant {
@@ -16,9 +16,9 @@ however in some cases we improvised the logic . below are the changes in the con
       }
   ```
 
-  Here in Original imlementation , withdraw and withdraw function has nonReentrant guard thus the withdrawAll function will revert due to reentrancy . To avoid this error we removed nonreentrant guard as shown below.
+  Here in original implementation , `withdraw()` and `withdrawAll()` function has `nonReentrant` modifier which act as reentrancy guard thus the `withdrawAll()` function will revert due to reentrancy . To avoid this error we removed nonreentrant guard as shown below.
 
-- Modified Function Implementation:
+- modified function Implementation:
 
   ```solidity
   function withdrawAll(uint256 _pid) external {
@@ -26,9 +26,9 @@ however in some cases we improvised the logic . below are the changes in the con
       }
   ```
 
-2- changes in updatepool() function:
+2- changes in `updatePool()` function:
 
-- Original implementation
+- original implementation
 
   ```solidity
     uint256 AUTOReward =
@@ -43,7 +43,7 @@ however in some cases we improvised the logic . below are the changes in the con
         AUTOToken(AUTOv2).mint(address(this), AUTOReward);
   ```
 
-- Modified implementtaion
+- modified implementtaion
 
   ```solidity
    uint256 autoReward = (multiplier *
@@ -56,7 +56,7 @@ however in some cases we improvised the logic . below are the changes in the con
     IAutoToken(a.autoV2).mint(address(this), autoReward - ownerReward);
   ```
 
-  AutoToken Rewards should be minted like this:
+  autoToken rewards should be minted like this:
 
   - A percentage of AUTOReward will be minted to owner (ownerAUTOReward = 12%)
 
@@ -64,7 +64,7 @@ however in some cases we improvised the logic . below are the changes in the con
 
   In original implementation ,additional 12% (ownerAUTOReward) of AUTOReward are minted whereas in modified implementation 12% tokens are minted to owner and remaining 88% of autoReward are minted to autofarm contract address.
 
-3- changes in add function :
+3- changes in `add()` function :
 
 ```solidity
   require(!a.iswantAdded[_want], "want added already!");
@@ -72,7 +72,7 @@ however in some cases we improvised the logic . below are the changes in the con
       a.wantToPid[_want] = a.poolInfo.length;
 ```
 
-- original Contracts don't have ability to check if same want pools are added or not. To solve this problem we have two mappings :-
+- original contracts don't have ability to check if same want pools are added or not. To solve this problem we have two mappings :-
 
   ```solidity
     mapping(address => uint256) wantToPid;
@@ -90,7 +90,7 @@ however in some cases we improvised the logic . below are the changes in the con
   function wantToPid(address want) external view returns (uint256)
   ```
 
-  wantToPid will revert if user has given address which is not added in pool .
+  `wantToPid()` will revert if user has given address which is not added in pool .
 
 ---
 
@@ -98,7 +98,7 @@ however in some cases we improvised the logic . below are the changes in the con
 
 1- Removed unused variables in deposit function
 
-- Original Implementation
+- original Implementation
 
   ```solidity
   function deposit(address _userAddress, uint256 _wantAmt)
@@ -110,7 +110,7 @@ however in some cases we improvised the logic . below are the changes in the con
           returns (uint256)
   ```
 
-- Modified implementation
+- modified implementation
 
   ```solidity
   function deposit(uint256 _wantAmt) external nonReentrant returns (uint256)
@@ -118,7 +118,7 @@ however in some cases we improvised the logic . below are the changes in the con
 
 2- Removed unused variables in deposit function
 
-- Original Implementation
+- original Implementation
 
   ```solidity
   function withdraw(address _userAddress, uint256 _wantAmt)
@@ -129,7 +129,7 @@ however in some cases we improvised the logic . below are the changes in the con
         returns (uint256)
   ```
 
-- Modified implementation
+- modified implementation
 
   ```solidity
    function withdraw(uint256 _wantAmt) external nonReentrant returns (uint256)
