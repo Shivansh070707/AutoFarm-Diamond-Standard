@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
 import {LibDiamond} from "../../libraries/LibDiamond.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "../../interfaces/IAutoToken.sol";
 import "../../interfaces/IStrategy.sol";
 
-contract AutoFarmFacet is Ownable, ReentrancyGuard {
+contract AutoFarmFacet is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -50,15 +50,13 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
         emit Deposit(msg.sender, _pid, _wantAmt);
     }
 
-    function withdrawAll(uint256 _pid) external nonReentrant {
+    function withdrawAll(uint256 _pid) external {
         withdraw(_pid, type(uint256).max);
     }
 
-    function inCaseTokensGetStuck(address _token, uint256 _amount)
-        external
-        onlyOwner
-    {
+    function inCaseTokensGetStuck(address _token, uint256 _amount) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        _onlyOwner(a.owner, msg.sender);
         require(_token != a.autoV2, "!safe");
         IERC20(_token).safeTransfer(msg.sender, _amount);
     }
@@ -89,8 +87,9 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
         address _want,
         bool _withUpdate,
         address _strat
-    ) external onlyOwner {
+    ) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        _onlyOwner(a.owner, msg.sender);
         if (_withUpdate) {
             massUpdatePools();
         }
@@ -114,8 +113,9 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
         uint256 _pid,
         uint256 _allocPoint,
         bool _withUpdate
-    ) external onlyOwner {
+    ) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        _onlyOwner(a.owner, msg.sender);
         if (_withUpdate) {
             massUpdatePools();
         }
@@ -167,6 +167,11 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
             return 0;
         }
         return (user.shares * (wantLockedTotal)) / (sharesTotal);
+    }
+
+    function poolLength() external view returns (uint256) {
+        LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        return a.poolInfo.length;
     }
 
     // Update reward variables for all pools. Be careful of gas spending!
@@ -245,7 +250,7 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
             (pool.allocPoint)) / (a.totalAllocPoint);
 
         IAutoToken(a.autoV2).mint(
-            owner(),
+            _owner(),
             (autoReward * (a.ownerAUTOReward)) / (1000)
         );
         IAutoToken(a.autoV2).mint(address(this), autoReward);
@@ -278,5 +283,14 @@ contract AutoFarmFacet is Ownable, ReentrancyGuard {
         } else {
             IERC20(a.autoV2).transfer(_to, _AUTOAmt);
         }
+    }
+
+    function _owner() internal view returns (address owner_) {
+        LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        return a.owner;
+    }
+
+    function _onlyOwner(address owner, address caller) private pure {
+        require(owner == caller, "Not Owner");
     }
 }

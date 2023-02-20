@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
 import {LibDiamond} from "../../libraries/LibDiamond.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -223,8 +224,8 @@ contract StratX2Facet is ReentrancyGuard {
     ) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
         require(msg.sender == s.govAddress, "!gov");
-        require(_token != s.earnedAddress, "!safe,token is Earned address");
-        require(_token != s.wantAddress, "!safe,token is want address");
+        require(_token != s.earnedAddress, "token is Earned address");
+        require(_token != s.wantAddress, "token is want address");
         IERC20(_token).safeTransfer(_to, _amount);
     }
 

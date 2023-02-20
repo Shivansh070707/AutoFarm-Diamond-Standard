@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
 import "../../libraries/LibDiamond.sol";
 
 contract StratX2GetterFacet {
@@ -16,6 +17,11 @@ contract StratX2GetterFacet {
     function isAutoComp() external view returns (bool) {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
         return s.isAutoComp;
+    }
+
+    function isPaused() external view returns (bool) {
+        LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
+        return s._paused;
     }
 
     function farmContractAddress() external view returns (address) {

@@ -24,12 +24,15 @@ contract DiamondInit {
 
     function autofarmInit(address _autoV2) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        require(a.owner == address(0), "already initialized");
+        a.owner = msg.sender;
         a.autoV2 = _autoV2;
         a.burnAddress = 0x000000000000000000000000000000000000dEaD;
         a.ownerAUTOReward = 138; // 12%
         a.autoMaxSupply = 80000e18;
         a.autoPerBlock = 8000000000000000; // auto tokens created per block
         a.startBlock = 3888888;
+        a.totalAllocPoint = 0;
 
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional
@@ -53,6 +56,8 @@ contract DiamondInit {
         uint256[] memory _num
     ) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
+        require(s.owner == address(0), "already initialized");
+        s.owner = msg.sender;
         s.wbnbAddress = _addresses[0];
         s.govAddress = _addresses[1];
         s.autoFarmAddress = _addresses[2];

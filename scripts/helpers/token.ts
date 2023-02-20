@@ -1,33 +1,30 @@
 import { ethers, network } from 'hardhat';
-import { AutoFarmV2, StratX2, IERC20 } from '../../typechain-types';
-import { Contract } from 'ethers';
+import {
+  Bitcoin,
+  ERC20,
+  Liquidity,
+  Matic,
+  Ownable,
+  XRP,
+  Cardano,
+  AUTOv2,
+} from '../../typechain-types';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 export async function main() {
-  let matic: Contract | IERC20;
-  let bitcoin: Contract | IERC20;
-  let ada: Contract | IERC20;
-  let xrp: Contract | IERC20;
-  let autoV2: Contract | IERC20;
-  let farmA: AutoFarmV2;
-  let farmB: AutoFarmV2;
-  let owner;
-  let otherAccount;
-  let stratA: StratX2;
-  let stratB: StratX2;
-  let pool;
-  let want: Contract | IERC20;
-  let autoV21: Contract | IERC20;
-  let reward;
+  let matic: Matic;
+  let bitcoin: Bitcoin;
+  let ada: Cardano;
+  let xrp: XRP;
+  let autoV2: AUTOv2;
+  let owner: SignerWithAddress;
+  let otherAccount: SignerWithAddress;
+  let pool: Liquidity;
+  let want: Ownable | ERC20;
+  let autoV21: AUTOv2;
+  let reward: SignerWithAddress;
 
-  const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
-  await network.provider.request({
-    method: 'hardhat_impersonateAccount',
-    params: [address],
-  });
-
-  owner = await ethers.getSigner(address);
-
-  [reward, otherAccount] = await ethers.getSigners();
+  [owner, reward, otherAccount] = await ethers.getSigners();
 
   //Deploying Tokens
   const MATIC = await ethers.getContractFactory('Matic');
@@ -42,7 +39,7 @@ export async function main() {
   const XRP = await ethers.getContractFactory('XRP');
   xrp = await XRP.connect(owner).deploy();
 
-  /* Deploying Auto V2 contract
+  /* Deploying Auto V2 Ownable
     autoV2 is used as a native token for autofarmA
     autov21 is used as native tokrn for autofarmB
     */
@@ -50,50 +47,34 @@ export async function main() {
   const AUTOV2 = await ethers.getContractFactory('AUTOv2');
   autoV2 = await AUTOV2.connect(owner).deploy();
   autoV21 = await AUTOV2.connect(owner).deploy();
-
-  /*
-    deploying autofarm contracts
-    */
-  const AUTOFARM = await ethers.getContractFactory('AutoFarmV2');
-  farmA = await AUTOFARM.connect(owner).deploy(autoV2.address);
-  farmB = await AUTOFARM.connect(owner).deploy(autoV21.address);
-
-  /*
-    Transferring ownership to respective autofarm addresses,
-    After transferring only autofarm contract is able to mint tokens.
-    */
-  await autoV2.connect(owner).transferOwnership(farmA.address);
-  await autoV21.connect(owner).transferOwnership(farmB.address);
-
   /*
     Deploying Lp pool for creating lp-pair
     */
-
   const LP_POOL = await ethers.getContractFactory('Liquidity');
   pool = await LP_POOL.connect(owner).deploy();
   /*
     Approving Pool address various tokens 
     */
-  await matic
+  await (matic as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('100'));
-  await bitcoin
+  await (bitcoin as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('150'));
-  await autoV21
+  await (autoV21 as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('100'));
-  await ada
+  await (ada as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('150'));
-  await xrp
+  await (xrp as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('150'));
 
-  await autoV2
+  await (autoV2 as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('100'));
-  await autoV21
+  await (autoV21 as ERC20)
     .connect(owner)
     .approve(pool.address, ethers.utils.parseEther('100'));
   /*
@@ -175,75 +156,7 @@ export async function main() {
 
   // want is lp pair of matic and bitcoin
   const wantaddress = await pool.getPair(matic.address, bitcoin.address);
-  want = await ethers.getContractAt('IERC20', wantaddress);
-  /*
-    Deploying Strat A contract
-    -Pid should of stratA and poolInfo[pid] of farmB should be same
-    -Autocompounding is true ,so the earned address will be the native token of farmB i.e autoV21
-     */
-
-  const StratA = await ethers.getContractFactory('StratX2_PCS');
-  stratA = await StratA.connect(owner).deploy(
-    [
-      '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-      owner.address,
-      farmA.address,
-      autoV2.address,
-      want.address,
-      matic.address,
-      bitcoin.address,
-      autoV21.address,
-      farmB.address,
-      '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
-      reward.address,
-      '0x000000000000000000000000000000000000dEaD',
-    ],
-    0,
-    false,
-    false,
-    true,
-    [autoV21.address, bitcoin.address, autoV2.address],
-    [autoV21.address, matic.address],
-    [autoV21.address, bitcoin.address],
-    [matic.address, autoV21.address],
-    [bitcoin.address, autoV21.address],
-    [70, 150, 9990, 10000]
-  );
-
-  const StratB = await ethers.getContractFactory('StratX2_PCS');
-  stratB = await StratB.connect(owner).deploy(
-    [
-      '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-      owner.address,
-      farmB.address,
-      xrp.address,
-      want.address,
-      matic.address,
-      bitcoin.address,
-      xrp.address,
-      farmA.address,
-      '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
-      reward.address,
-      '0x000000000000000000000000000000000000dEaD',
-    ],
-    0,
-    false,
-    false,
-    false,
-    [xrp.address, bitcoin.address, autoV21.address],
-    [xrp.address, matic.address],
-    [xrp.address, bitcoin.address],
-    [matic.address, xrp.address],
-    [bitcoin.address, xrp.address],
-    [70, 150, 9990, 10000]
-  );
-  // Adding First Pool in Both the farms
-  //await farmA.connect(owner).add(1, want.address, false, stratA.address);
-  await farmB.connect(owner).add(1, want.address, false, stratB.address);
-  //Approving want tokens to farm address
-  await want
-    .connect(owner)
-    .approve(farmA.address, ethers.utils.parseUnits('10', 'ether'));
+  want = await ethers.getContractAt('ERC20', wantaddress);
 
   console.log(`
     matic address = ${matic.address};
@@ -251,18 +164,12 @@ export async function main() {
     ada address=${ada.address};
     xrp address =${xrp.address}
     autoV2 address =${autoV2.address},
-    farmA address =${farmA.address};
-    farmB address =${farmB.address};
+    autoV21 address =${autoV21.address},
     owner address =${owner.address};
     otherAccount address =${otherAccount.address};
-    stratA address =${stratA.address};
-    stratB address =${stratB.address};
     pool address =${pool.address};
     want address =${want.address};
     reward address =${reward.address};
-    owner want balance =${await want.balanceOf(owner.address)}
-    xrp balance after ${await xrp.balanceOf(owner.address)};
-    
     `);
   return {
     matic,
@@ -270,22 +177,11 @@ export async function main() {
     ada,
     xrp,
     autoV2,
-    farmA,
-    farmB,
+    autoV21,
     owner,
     otherAccount,
-    stratA,
-    stratB,
     pool,
     want,
-    autoV21,
     reward,
   };
 }
-
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-// main().catch((error) => {
-//   console.error(error);
-//   process.exitCode = 1;
-// });

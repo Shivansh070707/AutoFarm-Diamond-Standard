@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Contract } from "ethers";
-import { ethers } from "hardhat";
+import { Contract } from 'ethers';
+import { ethers } from 'hardhat';
 
 export const FacetCutAction = {
   Add: 0,
@@ -42,11 +42,10 @@ class SelectorList {
     return this.selectors;
   }
 }
-
 export function getSelectorsFromContract(contract: Contract) {
   const signatures = Object.keys(contract.interface.functions);
   const selectors = signatures.reduce((acc: any[], val: string) => {
-    if (val !== "init(bytes)") acc.push(contract.interface.getSighash(val));
+    if (val !== 'init(bytes)') acc.push(contract.interface.getSighash(val));
     return acc;
   }, []);
   return new SelectorList(contract, selectors);

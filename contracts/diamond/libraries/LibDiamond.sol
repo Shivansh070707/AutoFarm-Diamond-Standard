@@ -59,6 +59,7 @@ library LibDiamond {
         address strat; // Strategy address that will auto compound want tokens
     }
     struct AutoFarmV2Storage {
+        address owner;
         address autoV2;
         address burnAddress;
         uint256 ownerAUTOReward; // 12%
@@ -88,6 +89,7 @@ library LibDiamond {
         bool isAutoComp; // this vault is purely for staking. eg. WBNB-AUTO staking vault.
         address farmContractAddress; // address of farm, eg, PCS, Thugs etc.
         uint256 pid; // pid of pool in farmContractAddress
+        address owner;
         address wantAddress;
         address token0Address;
         address token1Address;
@@ -134,10 +136,6 @@ library LibDiamond {
 
     function _msgSender() internal view returns (address) {
         return msg.sender;
-    }
-
-    function _msgData() internal pure returns (bytes calldata) {
-        return msg.data;
     }
 
     function paused() internal view returns (bool) {

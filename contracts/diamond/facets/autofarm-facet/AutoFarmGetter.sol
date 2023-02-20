@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
 import {LibDiamond} from "../../libraries/LibDiamond.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
@@ -9,12 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "../../interfaces/IAutoToken.sol";
 import "../../interfaces/IStrategy.sol";
 
-contract AutoFarmV2Getter {
-    function poolLength() external view returns (uint256) {
-        LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
-        return a.poolInfo.length;
-    }
-
+contract AutoFarmV2GetterFacet {
     function autoV2() external view returns (address) {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
         return a.autoV2;

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
 import {LibDiamond} from "../../libraries/LibDiamond.sol";
 
 contract StratX2SetterFacet {
@@ -25,7 +26,7 @@ contract StratX2SetterFacet {
         uint256 _slippageFactor
     ) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
-        require(msg.sender == s.govAddress, "!gov");
+        _onlyGov(s.govAddress, msg.sender);
         require(
             _entranceFeeFactor >= s.entranceFeeFactorLL,
             "_entranceFeeFactor too low"
@@ -69,48 +70,52 @@ contract StratX2SetterFacet {
 
     function setGov(address _govAddress) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
-        require(msg.sender == s.govAddress, "!gov");
+        _onlyGov(s.govAddress, msg.sender);
         s.govAddress = _govAddress;
         emit SetGov(_govAddress);
     }
 
-    function setOnlyGov(bool _onlyGov) external {
+    function setOnlyGov(bool onlyGov) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
-        require(msg.sender == s.govAddress, "!gov");
-        s.onlyGov = _onlyGov;
-        emit SetOnlyGov(_onlyGov);
+        _onlyGov(s.govAddress, msg.sender);
+        s.onlyGov = onlyGov;
+        emit SetOnlyGov(onlyGov);
     }
 
     function setUniRouterAddress(address _uniRouterAddress) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
-        require(msg.sender == s.govAddress, "!gov");
+        _onlyGov(s.govAddress, msg.sender);
         s.uniRouterAddress = _uniRouterAddress;
         emit SetUniRouterAddress(_uniRouterAddress);
     }
 
     function setBuyBackAddress(address _buyBackAddress) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
-        require(msg.sender == s.govAddress, "!gov");
+        _onlyGov(s.govAddress, msg.sender);
         s.buyBackAddress = _buyBackAddress;
         emit SetBuyBackAddress(_buyBackAddress);
     }
 
     function setRewardsAddress(address _rewardsAddress) external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
-        require(msg.sender == s.govAddress, "!gov");
+        _onlyGov(s.govAddress, msg.sender);
         s.rewardsAddress = _rewardsAddress;
         emit SetRewardsAddress(_rewardsAddress);
     }
 
     function pause() external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
-        require(msg.sender == s.govAddress, "!gov");
+        _onlyGov(s.govAddress, msg.sender);
         LibDiamond._pause();
     }
 
     function unpause() external {
         LibDiamond.StratX2Storage storage s = LibDiamond.stratX2Storage();
-        require(msg.sender == s.govAddress, "!gov");
+        _onlyGov(s.govAddress, msg.sender);
         LibDiamond._unpause();
+    }
+
+    function _onlyGov(address gov, address caller) private pure {
+        require(gov == caller, "!gov");
     }
 }
