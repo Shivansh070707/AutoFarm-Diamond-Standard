@@ -4,7 +4,9 @@
 
 - This is a simple example implementation for EIP-2535 Diamond Standard. To learn about other implementations go here: <https://github.com/mudgen/diamond>
 
-- The standard loupe functions have been gas-optimized in this implementation and can be called in on-chain transactions. However keep in mind that a diamond can have any number of functions and facets so it is still possible to get out-of-gas errors when calling loupe functions. Except for the facetAddress loupe function which has a fixed gas cost.
+- To view the changes of original contracts with diamond implementation [click here](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/e3dd4e28a6504794991b73adc16d1c4c299ad24d/docs/changes.md)
+
+- To learn about the contract flow between autofarm and strat , refer to the [docs](https://github.com/Shivansh070707/AutoFarm-Diamond-Standard/blob/e3dd4e28a6504794991b73adc16d1c4c299ad24d/docs/AutoFarm%20-%20Diamond%20Implementation.pdf)
 
 - The DApp (Decentralised Application) was designed with the purpose of optimising DeFi (Decentralised Finance) users yields as they interact with the other DApps in the DeFi space.
 - Reference -<https://autofarm.gitbook.io/autofarm-network/>
