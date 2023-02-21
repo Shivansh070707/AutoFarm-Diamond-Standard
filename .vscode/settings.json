@@ -1,0 +1,17 @@
+{
+    "grammarly.selectors": [
+        {
+            "language": "markdown",
+            "scheme": "file"
+        }
+    ],
+    "cSpell.words": [
+        "Alloc",
+        "autofarm",
+        "iswant",
+        "reentrancy",
+        "Shivansh",
+        "Shrivastava",
+        "wantto"
+    ]
+}

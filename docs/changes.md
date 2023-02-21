@@ -1,10 +1,8 @@
 # Code Improvisations
 
-The Autofarm-Diamond is implementation of autofarm and strat contracts in diamond standard.
-though whole implementation of state variables is different from original contracts but logic throughout the contracts are same,
-however in some cases we improvised the logic . below are the changes in the contracts .
+Autofarm-Diamond is the implementation of autofarm and strat contracts in the diamond standard. Although the whole implementation of state variables is different from the original contracts but logic throughout the contracts is same, however, in some cases, we improvised the logic. Below are the changes in the contracts:
 
-## Code changes from original autofarm contract
+## Code changes from the original autofarm contract
 
 1- Changes in `withdrawAll()` function:
 
@@ -16,7 +14,7 @@ however in some cases we improvised the logic . below are the changes in the con
       }
   ```
 
-  Here in original implementation , `withdraw()` and `withdrawAll()` function has `nonReentrant` modifier which act as reentrancy guard thus the `withdrawAll()` function will revert due to reentrancy . To avoid this error we removed nonreentrant guard as shown below.
+  Here, in the original implementation, `withdraw()` and `withdrawAll()` function has a `nonReentrant` modifier that acts as a reentrancy guard thus the `withdrawAll()` function will revert due to reentrancy. To avoid this error we removed the non-reentrant guard as shown below.
 
 - modified function Implementation:
 
@@ -43,7 +41,7 @@ however in some cases we improvised the logic . below are the changes in the con
         AUTOToken(AUTOv2).mint(address(this), AUTOReward);
   ```
 
-- modified implementtaion
+- modified implementation
 
   ```solidity
    uint256 autoReward = (multiplier *
@@ -58,11 +56,11 @@ however in some cases we improvised the logic . below are the changes in the con
 
   autoToken rewards should be minted like this:
 
-  - A percentage of AUTOReward will be minted to owner (ownerAUTOReward = 12%)
+  - A percentage of AUTOReward will be minted to the owner (ownerAUTOReward = 12%)
 
-  - Remaining tokens will be minted to the farmContract
+  - remaining tokens will be minted to the farmContract
 
-  In original implementation ,additional 12% (ownerAUTOReward) of AUTOReward are minted whereas in modified implementation 12% tokens are minted to owner and remaining 88% of autoReward are minted to autofarm contract address.
+  In the original implementation, an additional 12% (ownerAUTOReward) of AUTOReward are minted, whereas in the modified implementation 12% of tokens are minted to the owner and the remaining 88% of autoReward are minted to autofarm contract address.
 
 3- changes in `add()` function :
 
@@ -72,7 +70,7 @@ however in some cases we improvised the logic . below are the changes in the con
       a.wantToPid[_want] = a.poolInfo.length;
 ```
 
-- original contracts don't have ability to check if same want pools are added or not. To solve this problem we have two mappings :-
+- original contracts can't have the ability to check if the same want pools are added or not. To solve this problem we have two mappings:-
 
   ```solidity
     mapping(address => uint256) wantToPid;
@@ -80,8 +78,8 @@ however in some cases we improvised the logic . below are the changes in the con
 
   ```
 
-  wanttoPid returns the poolId or pid of a given want address .\
-  iswantAdded returns bool value whether want address is added in pid or not .
+  wanttoPid returns the poolId or pid of a given want address.\
+  iswantAdded returns a bool value whether the want address is added in pid or not.
 
   - To interact with these two mappings we have two functions :
 
@@ -90,13 +88,13 @@ however in some cases we improvised the logic . below are the changes in the con
   function wantToPid(address want) external view returns (uint256)
   ```
 
-  `wantToPid()` will revert if user has given address which is not added in pool .
+  `wantToPid()` will revert if the user has given an address that is not added to the pool.
 
 ---
 
-## Code changes from original stratx2 contract
+## Code changes from the original stratx2 contract
 
-1- Removed unused variables in deposit function
+1- Removed unused variables in the deposit function
 
 - original Implementation
 
@@ -116,7 +114,7 @@ however in some cases we improvised the logic . below are the changes in the con
   function deposit(uint256 _wantAmt) external nonReentrant returns (uint256)
   ```
 
-2- Removed unused variables in deposit function
+2- Removed unused variables in the deposit function
 
 - original Implementation
 
