@@ -60,6 +60,8 @@ library LibDiamond {
     }
     struct AutoFarmV2Storage {
         address owner;
+        mapping(address => uint256) wantToPid;
+        mapping(address => bool) iswantAdded;
         address autoV2;
         address burnAddress;
         uint256 ownerAUTOReward; // 12%

@@ -1,14 +1,12 @@
 # Code Improvisations
 
-The Autofarm-Diamond is implementation of autofarm and strat contracts in diamond standard.
-though whole implementation is different from original contracts but logic throughout the contracts are same,
-however in some cases we improvised the logic . below are the changes in the contracts .
+Autofarm-Diamond is the implementation of autofarm and strat contracts in the diamond standard. Although the whole implementation of state variables is different from the original contracts but logic throughout the contracts is same, however, in some cases, we improvised the logic. Below are the changes in the contracts:
 
-## Code changes from original autofarm contract
+## Code changes from the original autofarm contract
 
-1- Changes in withdrawAll() function:
+1- Changes in `withdrawAll()` function:
 
-- Original Function Implementation:
+- original function implementation:
 
   ```solidity
   function withdrawAll(uint256 _pid) public nonReentrant {
@@ -16,9 +14,9 @@ however in some cases we improvised the logic . below are the changes in the con
       }
   ```
 
-  Here in Original imlementation , withdraw and withdraw function has nonReentrant guard thus the withdrawAll function will revert due to reentrancy . To avoid this error we removed nonreentrant guard as shown below.
+  Here, in the original implementation, `withdraw()` and `withdrawAll()` function has a `nonReentrant` modifier that acts as a reentrancy guard thus the `withdrawAll()` function will revert due to reentrancy. To avoid this error we removed the non-reentrant guard as shown below.
 
-- Modified Function Implementation:
+- modified function Implementation:
 
   ```solidity
   function withdrawAll(uint256 _pid) external {
@@ -26,9 +24,9 @@ however in some cases we improvised the logic . below are the changes in the con
       }
   ```
 
-2- changes in updatepool() function:
+2- changes in `updatePool()` function:
 
-- Original implementation
+- original implementation
 
   ```solidity
     uint256 AUTOReward =
@@ -43,7 +41,7 @@ however in some cases we improvised the logic . below are the changes in the con
         AUTOToken(AUTOv2).mint(address(this), AUTOReward);
   ```
 
-- Modified implementtaion
+- modified implementation
 
   ```solidity
    uint256 autoReward = (multiplier *
@@ -56,21 +54,49 @@ however in some cases we improvised the logic . below are the changes in the con
     IAutoToken(a.autoV2).mint(address(this), autoReward - ownerReward);
   ```
 
-  AutoToken Rewards should be minted like this:
+  autoToken rewards should be minted like this:
 
-  - A percentage of AUTOReward will be minted to owner (ownerAUTOReward = 12%)
+  - A percentage of AUTOReward will be minted to the owner (ownerAUTOReward = 12%)
 
-  - Remaining tokens will be minted to the farmContract
+  - remaining tokens will be minted to the farmContract
 
-  In original implementation ,additional 12% (ownerAUTOReward) of AUTOReward are minted whereas in modified implementation 12% tokens are minted to owner and remaining 88% of autoReward are minted to autofarm contract address.
+  In the original implementation, an additional 12% (ownerAUTOReward) of AUTOReward are minted, whereas in the modified implementation 12% of tokens are minted to the owner and the remaining 88% of autoReward are minted to autofarm contract address.
+
+3- changes in `add()` function :
+
+```solidity
+  require(!a.iswantAdded[_want], "want added already!");
+      a.iswantAdded[_want] = true;
+      a.wantToPid[_want] = a.poolInfo.length;
+```
+
+- original contracts can't have the ability to check if the same want pools are added or not. To solve this problem we have two mappings:-
+
+  ```solidity
+    mapping(address => uint256) wantToPid;
+    mapping(address => bool) iswantAdded;
+
+  ```
+
+  wanttoPid returns the poolId or pid of a given want address.\
+  iswantAdded returns a bool value whether the want address is added in pid or not.
+
+  - To interact with these two mappings we have two functions :
+
+  ```solidity
+  function iswantAdded(address want) external view returns (bool)
+  function wantToPid(address want) external view returns (uint256)
+  ```
+
+  `wantToPid()` will revert if the user has given an address that is not added to the pool.
 
 ---
 
-## Code changes from original stratx2 contract
+## Code changes from the original stratx2 contract
 
-1- Removed unused variables in deposit function
+1- Removed unused variables in the deposit function
 
-- Original Implementation
+- original Implementation
 
   ```solidity
   function deposit(address _userAddress, uint256 _wantAmt)
@@ -82,15 +108,15 @@ however in some cases we improvised the logic . below are the changes in the con
           returns (uint256)
   ```
 
-- Modified implementation
+- modified implementation
 
   ```solidity
   function deposit(uint256 _wantAmt) external nonReentrant returns (uint256)
   ```
 
-2- Removed unused variables in deposit function
+2- Removed unused variables in the deposit function
 
-- Original Implementation
+- original Implementation
 
   ```solidity
   function withdraw(address _userAddress, uint256 _wantAmt)
@@ -101,7 +127,7 @@ however in some cases we improvised the logic . below are the changes in the con
         returns (uint256)
   ```
 
-- Modified implementation
+- modified implementation
 
   ```solidity
    function withdraw(uint256 _wantAmt) external nonReentrant returns (uint256)

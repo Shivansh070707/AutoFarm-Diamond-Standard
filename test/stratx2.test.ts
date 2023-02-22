@@ -18,7 +18,7 @@ import { Strat } from '../scripts/interfaces/strat';
 import { Data } from '../scripts/interfaces/data';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
-describe('Test', () => {
+describe('Tests for StratX2', () => {
   let stratX2Facet: StratX2Facet;
   let stratX2Setter: StratX2SetterFacet;
   let stratX2Getter: StratX2GetterFacet;
@@ -44,7 +44,7 @@ describe('Test', () => {
     autoV21 = data.autoV21;
     owner = data.owner;
   });
-  describe('StratX2 Tests ', () => {
+  describe('Adding Strat to Autofarm ', () => {
     it('should pool new pool in Both Farms', async () => {
       await autoV2.connect(owner).transferOwnership(farmA.diamondAddress);
       await autoV21.connect(owner).transferOwnership(farmB.diamondAddress);
@@ -64,7 +64,7 @@ describe('Test', () => {
       expect(await autoFarmFacet.poolLength()).to.equal(1);
     });
   });
-  describe('stratX2 Getter', () => {
+  describe('StratX2Getter Tests', () => {
     it('should return isCAKEStaking', async () => {
       stratX2Getter = stratA.stratX2Getter;
       let isCAKEStaking = false;
@@ -264,7 +264,7 @@ describe('Test', () => {
       }
     });
   });
-  describe('StratXFacet', () => {
+  describe('StratXFacet Tests', () => {
     it('should return correct pid', async () => {
       stratX2Getter = stratA.stratX2Getter;
       let pid = await stratX2Getter.pid();
@@ -320,7 +320,7 @@ describe('Test', () => {
       expect(earn_after.sub(earn_before)).to.be.greaterThan(0);
     });
   });
-  describe('stratX2Setter', () => {
+  describe('StratX2Setter Tests', () => {
     it('Should set Settings', async () => {
       stratX2Setter = stratA.stratX2Setter;
       await stratX2Setter
@@ -363,7 +363,7 @@ describe('Test', () => {
       expect(await stratX2Getter.isPaused()).to.equal(false);
     });
   });
-  describe('Errors', () => {
+  describe('Negative Test Cases - Strat', () => {
     it('Should throw error when caller is not gov ', async () => {
       let signer: SignerWithAddress[] = await ethers.getSigners();
       let user1: SignerWithAddress = signer[5];

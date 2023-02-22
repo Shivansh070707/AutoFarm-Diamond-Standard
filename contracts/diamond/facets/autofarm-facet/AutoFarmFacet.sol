@@ -89,6 +89,9 @@ contract AutoFarmFacet is ReentrancyGuard {
         address _strat
     ) external {
         LibDiamond.AutoFarmV2Storage storage a = LibDiamond.autoFarmStorage();
+        require(!a.iswantAdded[_want], "want added already!");
+        a.iswantAdded[_want] = true;
+        a.wantToPid[_want] = a.poolInfo.length;
         _onlyOwner(a.owner, msg.sender);
         if (_withUpdate) {
             massUpdatePools();
@@ -205,6 +208,7 @@ contract AutoFarmFacet is ReentrancyGuard {
 
         // Withdraw want tokens
         uint256 amount = (user.shares * (wantLockedTotal)) / (sharesTotal);
+
         if (_wantAmt > amount) {
             _wantAmt = amount;
         }
@@ -218,9 +222,11 @@ contract AutoFarmFacet is ReentrancyGuard {
             }
 
             uint256 wantBal = IERC20(pool.want).balanceOf(address(this));
+
             if (wantBal < _wantAmt) {
                 _wantAmt = wantBal;
             }
+
             IERC20(pool.want).safeTransfer(address(msg.sender), _wantAmt);
         }
         user.rewardDebt = (user.shares * (pool.accAUTOPerShare)) / (1e12);
@@ -248,16 +254,14 @@ contract AutoFarmFacet is ReentrancyGuard {
         uint256 autoReward = (multiplier *
             (a.autoPerBlock) *
             (pool.allocPoint)) / (a.totalAllocPoint);
+        uint256 ownerReward = (autoReward * (a.ownerAUTOReward)) / (1000);
 
-        IAutoToken(a.autoV2).mint(
-            _owner(),
-            (autoReward * (a.ownerAUTOReward)) / (1000)
-        );
-        IAutoToken(a.autoV2).mint(address(this), autoReward);
+        IAutoToken(a.autoV2).mint(_owner(), ownerReward);
+        IAutoToken(a.autoV2).mint(address(this), autoReward - ownerReward);
 
         pool.accAUTOPerShare =
             pool.accAUTOPerShare +
-            ((autoReward * (1e12)) / (sharesTotal));
+            (((autoReward) * (1e12)) / (sharesTotal));
         pool.lastRewardBlock = block.number;
     }
 
