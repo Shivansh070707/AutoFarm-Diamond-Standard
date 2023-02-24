@@ -1,0 +1,80 @@
+{
+  "address": "0xF660315D1fc6c7A85F8E9e5eC5aA7B873ad9b7C3",
+  "network": {
+    "name": "goerli",
+    "chainId": 5
+  },
+  "abi": [
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "DiamondCut",
+      "inputs": [
+        {
+          "type": "tuple[]",
+          "name": "_diamondCut",
+          "indexed": false,
+          "components": [
+            {
+              "type": "address",
+              "name": "facetAddress"
+            },
+            {
+              "type": "uint8",
+              "name": "action"
+            },
+            {
+              "type": "bytes4[]",
+              "name": "functionSelectors"
+            }
+          ]
+        },
+        {
+          "type": "address",
+          "name": "_init",
+          "indexed": false
+        },
+        {
+          "type": "bytes",
+          "name": "_calldata",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "diamondCut",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "tuple[]",
+          "name": "_diamondCut",
+          "components": [
+            {
+              "type": "address",
+              "name": "facetAddress"
+            },
+            {
+              "type": "uint8",
+              "name": "action"
+            },
+            {
+              "type": "bytes4[]",
+              "name": "functionSelectors"
+            }
+          ]
+        },
+        {
+          "type": "address",
+          "name": "_init"
+        },
+        {
+          "type": "bytes",
+          "name": "_calldata"
+        }
+      ],
+      "outputs": []
+    }
+  ]
+}

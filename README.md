@@ -75,7 +75,7 @@ npm install or yarn install
   This will compile the smart contract files using the specified solidity compiler in `hardhat.config.ts`.
 
   ```shell
-  npx hardhat compile
+  npm run compile
   ```
 
 - Instantiate the hardhat local node.
@@ -87,21 +87,21 @@ npm install or yarn install
 - Run the autofarm project tests using the local node.
 
   ```shell
-  npx hardhat test --network localhost
+  npm run test
   ```
 
 - Test Single files with typecheck:
 
   ```shell m
-  npx hardhat test ./test/autofarm.test.ts --network localhost --typecheck
+  npm run autofarm-test
   ```
 
   ```shell
-  npx hardhat test ./test/facet.test.ts --network localhost --typecheck
+  npm run strat-test
   ```
 
   ```shell
-  npx hardhat test ./test/stratx2.test.ts --network localhost --typecheck
+  npm run facet-test
   ```
 
 - Generate the code coverage report. \
@@ -150,7 +150,19 @@ npm install or yarn install
 - for deploying autofarm diamond you need to modify the variables in `./scripts/autofarm.deploy.ts`
 
   ```shell
-    npx hardhat run ./scripts/autofarm.deploy.ts --network <NETWORK>
+  npm run autofarm-deploy:localhost
+  ```
+
+  ```shell
+  npm run autofarm-deploy:goerli
+  ```
+
+  ```shell
+  npm run autofarm-deploy:mainnet
+  ```
+
+  ```shell
+  npm run autofarm-deploy:truffle
   ```
 
 #### Deploy StratX2
@@ -158,7 +170,19 @@ npm install or yarn install
 - for deploying stratx2 diamond you need to modify the variables in `./scripts/stratx2.deploy.ts`
 
   ```shell
-   npx hardhat run ./scripts/stratx2.deploy.ts --network <NETWORK>
+  npm run strat-deploy:localhost
+  ```
+
+  ```shell
+  npm run strat-deploy:goerli
+  ```
+
+  ```shell
+  npm run strat-deploy:mainnet
+  ```
+
+  ```shell
+  npm run strat-deploy:truffle
   ```
 
 - `<NETWORK>` can be `localhost`, `goerli`, `mainnet` or any other network that is supported and defined in the `hardhat.config.ts`.

@@ -12,6 +12,15 @@
     "compile": "hardhat compile",
     "test": "hardhat test --network localhost --typecheck",
     "autofarm-test": "hardhat test test/autofarm.test.ts --network localhost --typecheck",
-    "strat-test": "hardhat test test/stratx2.test.ts --network localhost --typecheck"
+    "strat-test": "hardhat test test/stratx2.test.ts --network localhost --typecheck",
+    "facet-test": "hardhat test test/facet.test.ts --network localhost --typecheck",
+    "autofarm-deploy:localhost": "hardhat run ./scripts/autofarm.deploy.ts --network localhost",
+    "autofarm-deploy:goerli": "hardhat run ./scripts/autofarm.deploy.ts --network goerli",
+    "autofarm-deploy:mainnet": "hardhat run ./scripts/stratx2.deploy.ts --network mainnet",
+    "autofarm-deploy:truffle": "hardhat run ./scripts/stratx2.deploy.ts --network truffle-dashboard",
+    "strat-deploy:localhost": "hardhat run ./scripts/stratx2.deploy.ts --network localhost",
+    "strat-deploy:goerli": "hardhat run ./scripts/stratx2.deploy.ts --network goerli",
+    "strat-deploy:mainnet": "hardhat run ./scripts/stratx2.deploy.ts --network mainnet",
+    "strat-deploy:truffle": "hardhat run ./scripts/stratx2.deploy.ts --network truffle-dashboard"
   }
 }

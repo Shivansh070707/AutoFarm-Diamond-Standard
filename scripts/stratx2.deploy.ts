@@ -38,15 +38,13 @@ let withdrawFeeFactor: Number = 1;
 let strat_name: string = 'StratA';
 
 async function main() {
-  let [Owner] = await ethers.getSigners();
-  let owner: string = Owner.address;
   /*
-    -Replace line no 42{ Owner.address } by the address of which contract are deploying .
+    -Replace line no 48{ owner} by the address of which contract are deploying .
     -Owner address must be equal to the address of which contracts are deploying.
-    -Comment line 41 by typing '//' at the beginning of line 9
     -Address will be in string "<Owner address>"
-
   */
+  let owner: string = '0x6e24689C13AeE0fabe6552f655607B71Cb425a44';
+
   let param = [
     [
       wbnbAddress,

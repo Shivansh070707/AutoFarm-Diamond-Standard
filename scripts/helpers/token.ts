@@ -1,4 +1,4 @@
-import { ethers, network } from 'hardhat';
+import { ethers } from 'hardhat';
 import {
   Bitcoin,
   ERC20,
@@ -28,16 +28,20 @@ export async function main() {
 
   //Deploying Tokens
   const MATIC = await ethers.getContractFactory('Matic');
-  matic = await MATIC.connect(owner).deploy();
+  matic = await MATIC.deploy();
+  await matic.deployed();
 
   const BITCOIN = await ethers.getContractFactory('Bitcoin');
-  bitcoin = await BITCOIN.connect(owner).deploy();
+  bitcoin = await BITCOIN.deploy();
+  await bitcoin.deployed();
 
   const ADA = await ethers.getContractFactory('Cardano');
-  ada = await ADA.connect(owner).deploy();
+  ada = await ADA.deploy();
+  await ada.deployed();
 
   const XRP = await ethers.getContractFactory('XRP');
-  xrp = await XRP.connect(owner).deploy();
+  xrp = await XRP.deploy();
+  await xrp.deployed();
 
   /* Deploying Auto V2 Ownable
     autoV2 is used as a native token for autofarmA
@@ -45,114 +49,85 @@ export async function main() {
     */
 
   const AUTOV2 = await ethers.getContractFactory('AUTOv2');
-  autoV2 = await AUTOV2.connect(owner).deploy();
-  autoV21 = await AUTOV2.connect(owner).deploy();
+  autoV2 = await AUTOV2.deploy();
+  await autoV2.deployed();
+  autoV21 = await AUTOV2.deploy();
+  await autoV21.deployed();
   /*
     Deploying Lp pool for creating lp-pair
     */
   const LP_POOL = await ethers.getContractFactory('Liquidity');
-  pool = await LP_POOL.connect(owner).deploy();
+  pool = await LP_POOL.deploy();
+  await pool.deployed();
   /*
     Approving Pool address various tokens 
     */
-  await (matic as ERC20)
-    .connect(owner)
-    .approve(pool.address, ethers.utils.parseEther('100'));
-  await (bitcoin as ERC20)
-    .connect(owner)
-    .approve(pool.address, ethers.utils.parseEther('150'));
-  await (autoV21 as ERC20)
-    .connect(owner)
-    .approve(pool.address, ethers.utils.parseEther('100'));
-  await (ada as ERC20)
-    .connect(owner)
-    .approve(pool.address, ethers.utils.parseEther('150'));
-  await (xrp as ERC20)
-    .connect(owner)
-    .approve(pool.address, ethers.utils.parseEther('150'));
+  await matic.approve(pool.address, ethers.utils.parseEther('100'));
+  await bitcoin.approve(pool.address, ethers.utils.parseEther('150'));
+  await autoV21.approve(pool.address, ethers.utils.parseEther('100'));
+  await ada.approve(pool.address, ethers.utils.parseEther('150'));
+  await xrp.approve(pool.address, ethers.utils.parseEther('150'));
 
-  await (autoV2 as ERC20)
-    .connect(owner)
-    .approve(pool.address, ethers.utils.parseEther('100'));
-  await (autoV21 as ERC20)
-    .connect(owner)
-    .approve(pool.address, ethers.utils.parseEther('100'));
+  await autoV2.approve(pool.address, ethers.utils.parseEther('100'));
+  await autoV21.approve(pool.address, ethers.utils.parseEther('100'));
   /*
     Creating LP-Pair of Various Tokens
     */
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      autoV21.address,
-      bitcoin.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      autoV21.address,
-      matic.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      matic.address,
-      bitcoin.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
+  await pool.addLiquidity(
+    autoV21.address,
+    bitcoin.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
+  await pool.addLiquidity(
+    autoV21.address,
+    matic.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
+  await pool.addLiquidity(
+    matic.address,
+    bitcoin.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
 
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      bitcoin.address,
-      autoV2.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      xrp.address,
-      ada.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      matic.address,
-      bitcoin.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      bitcoin.address,
-      autoV21.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      matic.address,
-      xrp.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
-  await pool
-    .connect(owner)
-    .addLiquidity(
-      xrp.address,
-      bitcoin.address,
-      ethers.utils.parseUnits('10', 'ether'),
-      ethers.utils.parseUnits('15', 'ether')
-    );
+  await pool.addLiquidity(
+    bitcoin.address,
+    autoV2.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
+  await pool.addLiquidity(
+    xrp.address,
+    ada.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
+  await pool.addLiquidity(
+    matic.address,
+    bitcoin.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
+  await pool.addLiquidity(
+    bitcoin.address,
+    autoV21.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
+  await pool.addLiquidity(
+    matic.address,
+    xrp.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
+  await pool.addLiquidity(
+    xrp.address,
+    bitcoin.address,
+    ethers.utils.parseUnits('10', 'ether'),
+    ethers.utils.parseUnits('15', 'ether')
+  );
 
   // want is lp pair of matic and bitcoin
   const wantaddress = await pool.getPair(matic.address, bitcoin.address);

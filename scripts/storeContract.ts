@@ -14,7 +14,7 @@ export async function storeContract(
       `First set the "CHAIN" and "ENV" variables in .env file at the root folder`
     );
     process.exit(1);
-  } else {
+  } else if (ENV != 'localhost') {
     try {
       fs.mkdirSync(`./build/${CHAIN}/${ENV}/${name}`, { recursive: true });
     } catch (e) {

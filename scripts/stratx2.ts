@@ -25,13 +25,7 @@ export async function deployStratDiamond(
   let diamondAddress: string;
   let diamondCutFacet: DiamondCutFacet;
   let diamondLoupeFacet: DiamondLoupeFacet;
-
   let OwnershipFacet: OwnershipFacet;
-  const address = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
-  await network.provider.request({
-    method: 'hardhat_impersonateAccount',
-    params: [address],
-  });
 
   console.log('**** Deploying Strat diamond ...');
 
