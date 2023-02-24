@@ -15,7 +15,7 @@
 
 ## Technologies used
 
-- solidity compiler version: `0.8.17`
+- solidity compiler version: `0.8.19`
 - [Hardhat](https://hardhat.org/) smart contracts architecture
 - [OpenZeppelin contracts](https://openzeppelin.com/)
 - [chai](https://www.chaijs.com/) for testing
@@ -252,12 +252,12 @@ string result = MyUsefulFacet(address(diamondContract)).getResult()
 
 ### Useful Links
 
-1. [Introduction to the Diamond Standard, EIP-2535 Diamonds](https://eip2535diamonds.substack.com/p/introduction-to-the-diamond-standard) 
-2. [EIP-2535 Diamonds](https://github.com/ethereum/EIPs/issues/2535) 
-3. [Understanding Diamonds on Ethereum](https://dev.to/mudgen/understanding-diamonds-on-ethereum-1fb) 
-4. [Solidity Storage Layout For Proxy Contracts and Diamonds](https://medium.com/1milliondevs/solidity-storage-layout-for-proxy-contracts-and-diamonds-c4f009b6903) 
-5. [New Storage Layout For Proxy Contracts and Diamonds](https://medium.com/1milliondevs/new-storage-layout-for-proxy-contracts-and-diamonds-98d01d0eadb) 
-6. [Upgradeable smart contracts using the Diamond Standard](https://hiddentao.com/archives/2020/05/28/upgradeable-smart-contracts-using-diamond-standard) 
+1. [Introduction to the Diamond Standard, EIP-2535 Diamonds](https://eip2535diamonds.substack.com/p/introduction-to-the-diamond-standard)
+2. [EIP-2535 Diamonds](https://github.com/ethereum/EIPs/issues/2535)
+3. [Understanding Diamonds on Ethereum](https://dev.to/mudgen/understanding-diamonds-on-ethereum-1fb)
+4. [Solidity Storage Layout For Proxy Contracts and Diamonds](https://medium.com/1milliondevs/solidity-storage-layout-for-proxy-contracts-and-diamonds-c4f009b6903)
+5. [New Storage Layout For Proxy Contracts and Diamonds](https://medium.com/1milliondevs/new-storage-layout-for-proxy-contracts-and-diamonds-98d01d0eadb)
+6. [Upgradeable smart contracts using the Diamond Standard](https://hiddentao.com/archives/2020/05/28/upgradeable-smart-contracts-using-diamond-standard)
 7. [builder-deploy supports diamonds](https://github.com/wighawag/buidler-deploy/)
 8. [Introduction to AutoFarm](https://medium.com/stakingbits/introduction-to-autofarm-on-the-binance-smart-chain-bc285203710c)
 

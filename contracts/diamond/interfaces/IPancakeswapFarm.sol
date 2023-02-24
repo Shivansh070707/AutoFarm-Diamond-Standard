@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 interface IPancakeswapFarm {
     function poolLength() external view returns (uint256);
@@ -7,16 +7,16 @@ interface IPancakeswapFarm {
     function userInfo() external view returns (uint256);
 
     // Return reward multiplier over the given _from to _to block.
-    function getMultiplier(
-        uint256 _from,
-        uint256 _to
-    ) external view returns (uint256);
+    function getMultiplier(uint256 _from, uint256 _to)
+        external
+        view
+        returns (uint256);
 
     // View function to see pending CAKEs on frontend.
-    function pendingCake(
-        uint256 _pid,
-        address _user
-    ) external view returns (uint256);
+    function pendingCake(uint256 _pid, address _user)
+        external
+        view
+        returns (uint256);
 
     // Deposit LP tokens to MasterChef for CAKE allocation.
     function deposit(uint256 _pid, uint256 _amount) external;
