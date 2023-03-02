@@ -1,0 +1,24 @@
+{
+  "address": "0x4cce43020148115f3cb435D9c2a2d71E4C2C11A5",
+  "network": {
+    "name": "goerli",
+    "chainId": 5
+  },
+  "abi": [
+    {
+      "type": "constructor",
+      "stateMutability": "payable",
+      "payable": true,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_contractOwner"
+        },
+        {
+          "type": "address",
+          "name": "_diamondCutFacet"
+        }
+      ]
+    }
+  ]
+}
