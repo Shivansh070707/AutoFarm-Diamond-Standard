@@ -1,5 +1,5 @@
 {
-  "name": "hardhat-project",
+  "name": "autofarm_diamond",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "hardhat": "^2.12.5",
@@ -8,6 +8,7 @@
     "@openzeppelin/contracts": "^4.8.0",
     "hardhat-contract-sizer": "^2.6.1"
   },
+  "license": "MIT",
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test --network localhost --typecheck",
